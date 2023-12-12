@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Controls;
+﻿using System.Globalization;
+using Microsoft.Maui.Controls;
 using ProgettoParadigmi.Mobile.Handlers;
 using ProgettoParadigmi.Models.Dto;
 #if __ANDROID__
@@ -15,6 +16,9 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
+        var culture = new CultureInfo("it-IT"); // Replace with your desired culture or language code
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
         if (Application.Current != null) Application.Current.UserAppTheme = AppTheme.Dark;
         // Border less entry
         Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(BorderlessEntry), (handler, view) =>

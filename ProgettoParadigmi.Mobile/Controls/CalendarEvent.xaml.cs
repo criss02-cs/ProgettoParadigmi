@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using ProgettoParadigmi.Mobile.Models;
+using ProgettoParadigmi.Models.Dto;
 
 namespace ProgettoParadigmi.Mobile.Controls;
 
@@ -27,7 +28,7 @@ public partial class CalendarEvent : ContentView
 
     private void TapGestureRecognizer_Tapped(object sender, System.EventArgs e)
     {
-        if (BindingContext is AdvancedEventModel eventModel)
+        if (BindingContext is AppuntamentoDto eventModel)
             CalendarEventCommand?.Execute(eventModel);
     }
 }

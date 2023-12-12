@@ -54,7 +54,7 @@ public partial class HomePageViewModel : BaseViewModel
     [RelayCommand]
     public async Task CreateNewEvent()
     {
-        await Shell.Current.GoToAsync(nameof(AddEventPage));
+        await Shell.Current.GoToAsync(nameof(AddEventPage), true);
     }
 
     [RelayCommand]

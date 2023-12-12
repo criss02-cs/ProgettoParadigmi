@@ -11,14 +11,17 @@ public partial class AddEventPageViewModel(IAppuntamentiService service) : BaseV
     {
         OrganizzatoreId = App.UserDetails.Id,
         DataInizio = DateTime.Now,
-        DataFine = DateTime.Now.AddHours(1)
+        DataFine = DateTime.Now.AddHours(1),
+        Partecipanti = []
     };
     private IAppuntamentiService _service = service;
+    [ObservableProperty] private DateTime _dataFine = DateTime.Now.AddHours(1);
 
 
     [RelayCommand]
     public async Task CreateEvent()
     {
+        
         var result = await _service.CreaAppuntamento(AppuntamentoDto);
         if (result is { IsSuccess: true })
         {

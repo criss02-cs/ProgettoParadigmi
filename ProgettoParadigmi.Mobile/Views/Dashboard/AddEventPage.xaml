@@ -10,35 +10,43 @@
     <VerticalStackLayout
         Spacing="10"
         Padding="10">
-        <Border Stroke="White" StrokeThickness="1">
+        <Border Stroke="White" StrokeThickness="1"
+                Padding="5,0,0,0">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="10" />
             </Border.StrokeShape>
             <handlers:BorderlessEntry
                 Text="{Binding AppuntamentoDto.Titolo}"
-                Placeholder="Aggiungi titolo" />
+                Placeholder="Aggiungi titolo"
+                PlaceholderColor="Gray"
+                TextColor="White"/>
         </Border>
-        <Border Stroke="White" StrokeThickness="1">
+        <Border Stroke="White" StrokeThickness="1"
+                Padding="5,0,0,0">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="10" />
             </Border.StrokeShape>
             <handlers:BorderlessEntry
                 Text="{Binding AppuntamentoDto.Descrizione}"
-                Placeholder="Descrizione" />
+                Placeholder="Descrizione"
+                PlaceholderColor="Gray"
+                TextColor="White"/>
         </Border>
-        <StackLayout Orientation="Horizontal">
+        <StackLayout Orientation="Horizontal"
+                     Spacing="10">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="100" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Label Text="Data Inizio" TextColor="White" VerticalOptions="Center" />
                 <DatePicker Date="{Binding AppuntamentoDto.DataInizio.Date}"
-                            Grid.Column="1" TextColor="White" Format="dd/MM/yyyy" />
+                            Grid.Column="1" TextColor="White"
+                            Format="dd/MM/yyyy" />
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="100" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Label Text="Ora Inizio" TextColor="White" VerticalOptions="Center" />
@@ -54,7 +62,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Label Text="Data Fine" TextColor="White" VerticalOptions="Center" />
-                <DatePicker Date="{Binding AppuntamentoDto.DataInizio.Date}"
+                <DatePicker Date="{Binding DataFine.Date}"
                             Grid.Column="1" TextColor="White" Format="dd/MM/yyyy" />
             </Grid>
             <Grid>
@@ -63,7 +71,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Label Text="Ora Fine" TextColor="White" VerticalOptions="Center" />
-                <TimePicker Time="{Binding AppuntamentoDto.DataInizio.TimeOfDay}"
+                <TimePicker Time="{Binding DataFine.TimeOfDay}"
                             Grid.Column="1" TextColor="White" Format="hh:mm" />
             </Grid>
         </StackLayout>

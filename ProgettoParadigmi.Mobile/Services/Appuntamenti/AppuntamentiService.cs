@@ -27,17 +27,25 @@ public class AppuntamentiService : IAppuntamentiService
 
     public async Task<Response<bool>?> CreaAppuntamento(AppuntamentoDto dto)
     {
-        using (var client = HttpClientFactory.Create())
+        try
         {
-            var response = await client.PostAsJsonAsync($"{_appuntamentiUrl}/Insert", dto);
-            if (response.StatusCode != HttpStatusCode.NotFound)
+            using (var client = HttpClientFactory.Create())
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<Response<bool>>(content, Costanti.DefaultOptions);
-                return result;
+                var response = await client.PostAsJsonAsync($"{_appuntamentiUrl}/Insert", dto);
+                if (response.StatusCode != HttpStatusCode.NotFound)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var result = JsonSerializer.Deserialize<Response<bool>>(content, Costanti.DefaultOptions);
+                    return result;
+                }
+
+                var error = await response.Content.ReadAsStringAsync();
+                return ResponseFactory.CreateResponseFromResult(false, false, error);
             }
-            var error = await response.Content.ReadAsStringAsync();
-            return ResponseFactory.CreateResponseFromResult(false, false, error);
+        }
+        catch (Exception e)
+        {
+            return ResponseFactory.CreateResponseFromResult(false, false, e.Message);
         }
     }
 }
