@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:font="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
+             xmlns:startup="clr-namespace:ProgettoParadigmi.Mobile.ViewModels.Startup"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:handlers="clr-namespace:ProgettoParadigmi.Mobile.Handlers"
+             x:Class="ProgettoParadigmi.Mobile.Views.Startup.LoginPage"
+             Shell.NavBarIsVisible="False"
+             x:DataType="startup:LoginPageViewModel">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <VerticalStackLayout
+        Spacing="25"
+        Padding="30,0"
+        VerticalOptions="Center">
+        <Border HeightRequest="160"
+                WidthRequest="160"
+                StrokeShape="RoundRectangle 80,80,80,80"
+                HorizontalOptions="Center"
+                StrokeThickness="2"
+                Margin="0,-20,0,0">
+            <Image Source="calendario.jpg" HeightRequest="150" WidthRequest="150" />
+        </Border>
+        <VerticalStackLayout Spacing="5">
+            <Label Text="Benvenuto!" FontSize="18" TextColor="White" HorizontalTextAlignment="Center" />
+            <Label Text="Accedi al tuo account" FontSize="18" TextColor="White" HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+
+        <StackLayout Orientation="Horizontal">
+            <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
+                   WidthRequest="56" CornerRadius="28">
+                <Image
+                    Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.User},
+                    Color={StaticResource PrimaryDark}}" />
+            </Frame>
+            <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                   HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
+                <handlers:BorderlessEntry Text="{Binding LoginDto.Email}"
+                                          TextColor="{StaticResource PrimaryDarkText}"
+                                          Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Email"
+                                          Keyboard="Email" />
+            </Frame>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
+                   WidthRequest="56" CornerRadius="28">
+                <Image
+                    Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Lock},
+                    Color={StaticResource PrimaryDark}}" />
+            </Frame>
+            <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                   HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <handlers:BorderlessEntry Text="{Binding LoginDto.Password}"
+                           TextColor="{StaticResource PrimaryDarkText}"
+                           Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Password" 
+                           IsPassword="{Binding ShowPassword, Converter={StaticResource InvertedBoolConverter}}" />
+                    <ImageButton Grid.Column="1"
+                        Command="{Binding TogglePasswordCommand}"
+                        BackgroundColor="Transparent"
+                        Margin="0,0,10,0">
+                        <ImageButton.Triggers>
+                            <DataTrigger TargetType="ImageButton"
+                                         Binding="{Binding ShowPassword}"
+                                         Value="True">
+                                <Setter Property="Source">
+                                    <Setter.Value>
+                                        <FontImageSource FontFamily="FaSolid"
+                                                         Color="{StaticResource PrimaryDark}"
+                                                         Glyph="{x:Static font:FaSolidIcons.EyeSlash}" />
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="ImageButton"
+                                         Binding="{Binding ShowPassword}"
+                                         Value="False">
+                                <Setter Property="Source">
+                                    <Setter.Value>
+                                        <FontImageSource FontFamily="FaSolid"
+                                                         Color="{StaticResource PrimaryDark}"
+                                                         Glyph="{x:Static font:FaSolidIcons.Eye}" />
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </ImageButton.Triggers>
+                    </ImageButton>
+                </Grid>
+            </Frame>
+        </StackLayout>
+        <Button Text="Accedi" WidthRequest="100" CornerRadius="20" HorizontalOptions="Center"
+                Command="{Binding LoginCommand}" />
+        <StackLayout Orientation="Horizontal" Spacing="5" HorizontalOptions="Center">
+            <Label Text="Non hai un account?" TextColor="White" />
+            <Label Text="Registrati" TextColor="#50b3f2" />
+        </StackLayout>
+    </VerticalStackLayout>
+</ContentPage>

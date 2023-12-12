@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="ProgettoParadigmi.Mobile.Views.Dashboard.HomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:ProgettoParadigmi.Mobile.Controls"
+    xmlns:dashboard="clr-namespace:ProgettoParadigmi.Mobile.ViewModels.Dashboard"
+    xmlns:font="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
+    xmlns:plugin="clr-namespace:Plugin.Maui.Calendar.Controls;assembly=Plugin.Maui.Calendar"
+    x:Name="advancedCalendarPage"
+    x:DataType="dashboard:HomePageViewModel">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="DaysLabelStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="White" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding CreateNewEventCommand}" IconImageSource="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Plus}, Color={StaticResource White}}" />
+    </ContentPage.ToolbarItems>
+    <plugin:Calendar
+        Padding="10,0"
+        ArrowsBorderColor="Transparent"
+        ArrowsColor="White"
+        ArrowsFontFamily="FaSolid"
+        Culture="{Binding Culture}"
+        DayViewSize="40"
+        DaysLabelStyle="{StaticResource DaysLabelStyle}"
+        DaysTitleColor="White"
+        DeselectedDayTextColor="White"
+        Events="{Binding Events}"
+        EventsScrollViewVisible="True"
+        OtherMonthDayColor="Gray"
+        SelectedDate="{Binding SelectedDate}"
+        ShownDate="{Binding ShownDate}"
+        SwipeLeftCommand="{Binding SwipeLeftCommand}"
+        SwipeRightCommand="{Binding SwipeRightCommand}"
+        SwipeUpCommand="{Binding SwipeUpCommand}"
+        TodayTextColor="White">
+        <plugin:Calendar.HeaderSectionTemplate>
+            <controls:ContentHeader />
+        </plugin:Calendar.HeaderSectionTemplate>
+        <plugin:Calendar.EventTemplate>
+            <DataTemplate>
+                <controls:CalendarEvent CalendarEventCommand="{Binding BindingContext.EventSelectedCommand, Source={x:Reference advancedCalendarPage}}" />
+            </DataTemplate>
+        </plugin:Calendar.EventTemplate>
+    </plugin:Calendar>
+</ContentPage>

@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:plugin="clr-namespace:Plugin.Maui.Calendar.Controls;assembly=Plugin.Maui.Calendar"
+             xmlns:viewModels="clr-namespace:ProgettoParadigmi.Mobile.ViewModels"
+             xmlns:controls="clr-namespace:ProgettoParadigmi.Mobile.Controls"
+             x:Class="ProgettoParadigmi.Mobile.MainPage"
+             x:Name="advancedCalendarPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="daysLabelStyle" TargetType="Label">
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="LineBreakMode" Value="WordWrap" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="Margin" Value="5,2" />
+            </Style>
+            <Style x:Key="daysTitleLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                 <Setter Property="FontFamily" Value="OpenSansSemibold" /> 
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <viewModels:AdvancedPageViewModel />
+    </ContentPage.BindingContext>
+
+    <plugin:Calendar
+        Culture="{Binding Culture}"
+        EventsScrollViewVisible="True"
+        Padding="10,0"
+        ArrowsFontFamily="FaSolid"
+        ShownDate="{Binding ShownDate}"
+        SelectedDate="{Binding SelectedDate}"
+        SwipeLeftCommand="{Binding SwipeLeftCommand}"
+        SwipeRightCommand="{Binding SwipeRightCommand}"
+        SwipeUpCommand="{Binding SwipeUpCommand}"
+        Events="{Binding Events}">
+        <plugin:Calendar.HeaderSectionTemplate>
+            <controls:ContentHeader />
+        </plugin:Calendar.HeaderSectionTemplate>
+        <plugin:Calendar.EventTemplate>
+            <DataTemplate>
+                <controls:CalendarEvent CalendarEventCommand="{Binding BindingContext.EventSelectedCommand, Source={x:Reference advancedCalendarPage}}" />
+            </DataTemplate>
+        </plugin:Calendar.EventTemplate>
+    </plugin:Calendar>
+    <!-- <TimePicker Time="4:15:26" /> -->
+    
+
+    <!-- <plugin:Calendar -->
+    <!--     Padding="10,0" -->
+    <!--     AnimateCalendar="True" -->
+    <!--     CalendarLayout="{Binding CalendarLayout}" -->
+    <!--     Culture="{Binding Culture}" -->
+    <!--     DayTappedCommand="{Binding DayTappedCommand}" -->
+    <!--     DayViewCornerRadius="3" -->
+    <!--     DayViewSize="40" -->
+    <!--     DaysLabelStyle="{StaticResource daysLabelStyle}" -->
+    <!--     DaysTitleColor="Orange" -->
+    <!--     DaysTitleHeight="40" -->
+    <!--     ArrowsFontFamily="FontAwesomeSolid" -->
+    <!--     DaysTitleLabelStyle="{StaticResource daysTitleLabelStyle}" -->
+    <!--     DaysTitleMaximumLength="ThreeChars" -->
+    <!--     DeselectedDayTextColor="Blue" -->
+    <!--     DisableSwipeDetection="False" -->
+    <!--     EventIndicatorColor="Red" -->
+    <!--     EventIndicatorSelectedColor="IndianRed" -->
+    <!--     EventIndicatorSelectedTextColor="AliceBlue" -->
+    <!--     EventIndicatorTextColor="WhiteSmoke" -->
+    <!--     EventIndicatorType="Background" -->
+    <!--     Events="{Binding Events}" -->
+    <!--     HeaderSectionVisible="True" -->
+    <!--     HorizontalOptions="Fill" -->
+    <!--     MonthLabelColor="Red" -->
+    <!--     OtherMonthDayColor="Gray" -->
+    <!--     OtherMonthDayIsVisible="False" -->
+    <!--     SelectedDateColor="Red" -->
+    <!--     SelectedDateTextFormat="ddd, dd MMM yyyy" -->
+    <!--     SelectedDayBackgroundColor="DarkCyan" -->
+    <!--     SelectedDayTextColor="Cyan" -->
+    <!--     SelectedTodayTextColor="Green" -->
+    
+    <!--     SwipeToChangeMonthEnabled="False" -->
+    
+    <!--     SwipeUpToHideEnabled="False" -->
+    <!--     TodayFillColor="Silver" -->
+    <!--     TodayOutlineColor="Blue" -->
+    <!--     TodayTextColor="Yellow" -->
+    <!--     VerticalOptions="Fill" -->
+    <!--     YearLabelColor="Blue"> -->
+    <!-- -->
+    
+    <!-- -->
+    <!--     <plugin:Calendar.FooterSectionTemplate> -->
+    <!--         <DataTemplate> -->
+    <!--             <controls:CalendarFooter  /> -->
+    <!--         </DataTemplate> -->
+    <!--     </plugin:Calendar.FooterSectionTemplate> -->
+    <!-- -->
+    
+    <!--     <plugin:Calendar.EmptyTemplate> -->
+    <!--         <DataTemplate> -->
+    <!--             <VerticalStackLayout> -->
+    <!--                 <Label -->
+    <!--                     Margin="0,5,0,5" -->
+    <!--                     HorizontalTextAlignment="Center" -->
+    <!--                     Text="NO EVENTS FOR THE SELECTED DATE" /> -->
+    <!--             </VerticalStackLayout> -->
+    <!--         </DataTemplate> -->
+    <!--     </plugin:Calendar.EmptyTemplate> -->
+    <!-- </plugin:Calendar>     -->
+
+</ContentPage>

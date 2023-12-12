@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:handlers="clr-namespace:ProgettoParadigmi.Mobile.Handlers"
+             xmlns:dashboard="clr-namespace:ProgettoParadigmi.Mobile.ViewModels.Dashboard"
+             x:Class="ProgettoParadigmi.Mobile.Views.Dashboard.AddEventPage"
+             Title="Crea nuovo appuntamento"
+             x:DataType="dashboard:AddEventPageViewModel">
+    <VerticalStackLayout
+        Spacing="10"
+        Padding="10">
+        <Border Stroke="White" StrokeThickness="1">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10" />
+            </Border.StrokeShape>
+            <handlers:BorderlessEntry
+                Text="{Binding AppuntamentoDto.Titolo}"
+                Placeholder="Aggiungi titolo" />
+        </Border>
+        <Border Stroke="White" StrokeThickness="1">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10" />
+            </Border.StrokeShape>
+            <handlers:BorderlessEntry
+                Text="{Binding AppuntamentoDto.Descrizione}"
+                Placeholder="Descrizione" />
+        </Border>
+        <StackLayout Orientation="Horizontal">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Text="Data Inizio" TextColor="White" VerticalOptions="Center" />
+                <DatePicker Date="{Binding AppuntamentoDto.DataInizio.Date}"
+                            Grid.Column="1" TextColor="White" Format="dd/MM/yyyy" />
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Text="Ora Inizio" TextColor="White" VerticalOptions="Center" />
+                <TimePicker Time="{Binding AppuntamentoDto.DataInizio.TimeOfDay}"
+                            Grid.Column="1" TextColor="White" Format="hh:mm" />
+            </Grid>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal"
+                     Spacing="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Text="Data Fine" TextColor="White" VerticalOptions="Center" />
+                <DatePicker Date="{Binding AppuntamentoDto.DataInizio.Date}"
+                            Grid.Column="1" TextColor="White" Format="dd/MM/yyyy" />
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Text="Ora Fine" TextColor="White" VerticalOptions="Center" />
+                <TimePicker Time="{Binding AppuntamentoDto.DataInizio.TimeOfDay}"
+                            Grid.Column="1" TextColor="White" Format="hh:mm" />
+            </Grid>
+        </StackLayout>
+        
+        <Button Text="Crea" Command="{Binding CreateEventCommand}" />
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Shell
+    x:Class="ProgettoParadigmi.Mobile.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:ProgettoParadigmi.Mobile"
+    xmlns:viewModels="clr-namespace:ProgettoParadigmi.Mobile.ViewModels"
+    xmlns:startup="clr-namespace:ProgettoParadigmi.Mobile.Views.Startup"
+    Shell.TabBarIsVisible="False"
+    x:DataType="viewModels:AppShellViewModel">
+
+    <ShellContent FlyoutItemIsVisible="False"
+                  Shell.FlyoutBehavior="Disabled"
+                  ContentTemplate="{DataTemplate startup:LoadingPage}"
+                  Route="LoadingPage" />
+    <ShellContent FlyoutItemIsVisible="False"
+                  Title="Login Page"
+                  Shell.FlyoutBehavior="Disabled"
+                  ContentTemplate="{DataTemplate startup:LoginPage}"
+                  Route="LoginPage" />
+
+    <Shell.FlyoutFooter>
+        <StackLayout Padding="20">
+            <Button Text="Esci" Command="{Binding SignOutCommand}" />
+        </StackLayout>
+    </Shell.FlyoutFooter>
+
+</Shell>
