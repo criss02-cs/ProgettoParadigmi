@@ -15,6 +15,9 @@ namespace ProgettoParadigmi.Models.Entities
         // Foreign Key con l'utente
         public Guid OrganizzatoreId { get; set; }
         public Utente Organizzatore { get; set; }
+        
+        public Guid CategoriaId { get; set; }
+        public Categoria Categoria { get; set; }
 
         public List<Partecipante> Partecipanti { get; set; }
     }

@@ -19,6 +19,9 @@ namespace ProgettoParadigmi.Models.Entities
 
         // Appuntamenti a cui si è stato invitato
         public List<Partecipante> Partecipazioni { get; set; }
+        
+        // Categorie create
+        public List<Categoria> Categorie { get; set; }
     }
 
     public enum TipoUtente

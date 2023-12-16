@@ -17,6 +17,11 @@ namespace ProgettoParadigmi.Models.Configurations
                 .HasOne(x => x.Organizzatore)
                 .WithMany(x => x.Appuntamenti)
                 .HasForeignKey(x => x.OrganizzatoreId);
+
+            builder.HasOne(x => x.Categoria)
+                .WithMany(x => x.Appuntamenti)
+                .HasForeignKey(x => x.CategoriaId)
+                .OnDelete(DeleteBehavior.NoAction);
             //builder.ToTable("Appuntamenti");
         }
     }

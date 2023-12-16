@@ -28,6 +28,9 @@ namespace ProgettoParadigmi.Models.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CategoriaId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -56,9 +59,44 @@ namespace ProgettoParadigmi.Models.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoriaId");
+
                     b.HasIndex("OrganizzatoreId");
 
                     b.ToTable("Appuntamenti");
+                });
+
+            modelBuilder.Entity("ProgettoParadigmi.Models.Entities.Categoria", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Descrizione")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Categorie");
                 });
 
             modelBuilder.Entity("ProgettoParadigmi.Models.Entities.Partecipante", b =>
@@ -135,13 +173,31 @@ namespace ProgettoParadigmi.Models.Migrations
 
             modelBuilder.Entity("ProgettoParadigmi.Models.Entities.Appuntamento", b =>
                 {
+                    b.HasOne("ProgettoParadigmi.Models.Entities.Categoria", "Categoria")
+                        .WithMany("Appuntamenti")
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("ProgettoParadigmi.Models.Entities.Utente", "Organizzatore")
                         .WithMany("Appuntamenti")
                         .HasForeignKey("OrganizzatoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Categoria");
+
                     b.Navigation("Organizzatore");
+                });
+
+            modelBuilder.Entity("ProgettoParadigmi.Models.Entities.Categoria", b =>
+                {
+                    b.HasOne("ProgettoParadigmi.Models.Entities.Utente", "User")
+                        .WithMany("Categorie")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ProgettoParadigmi.Models.Entities.Partecipante", b =>
@@ -168,9 +224,16 @@ namespace ProgettoParadigmi.Models.Migrations
                     b.Navigation("Partecipanti");
                 });
 
+            modelBuilder.Entity("ProgettoParadigmi.Models.Entities.Categoria", b =>
+                {
+                    b.Navigation("Appuntamenti");
+                });
+
             modelBuilder.Entity("ProgettoParadigmi.Models.Entities.Utente", b =>
                 {
                     b.Navigation("Appuntamenti");
+
+                    b.Navigation("Categorie");
 
                     b.Navigation("Partecipazioni");
                 });

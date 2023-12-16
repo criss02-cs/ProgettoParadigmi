@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Drawing;
+using Microsoft.EntityFrameworkCore;
 using ProgettoParadigmi.Api.Utils;
 using ProgettoParadigmi.EmailSender;
 using ProgettoParadigmi.Models.Context;
@@ -32,6 +33,30 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
                 OrganizzatoreId = x.Organizzatore.Id,
                 DataFine = x.DataFine,
                 Titolo = x.Titolo,
+                Categoria = new CategoriaDto(x.Categoria.Descrizione, x.Categoria.Id, x.Categoria.Color)
+            })
+            .ToList();
+        return ResponseFactory.CreateResponseFromResult(appuntamenti);
+    }
+
+    public Response<List<AppuntamentoDto>> GetAppuntamentiByCategoriaId(Guid categoriaId, int mese, int anno)
+    {
+        if (categoriaId == Guid.Empty)
+            return ResponseFactory.CreateResponseFromResult<List<AppuntamentoDto>>(null, false,
+                "L'id non può essere vuoto");
+        if (mese == 0) mese = DateTime.Today.Month;
+        if (anno == 0) anno = DateTime.Today.Year;
+        var appuntamenti = _appuntamenti
+            .Query(x => x.Categoria.Id == categoriaId
+                        && x.DataInizio.Year == anno && x.DataInizio.Month == mese)
+            .Select(x => new AppuntamentoDto
+            {
+                DataInizio = x.DataInizio,
+                Descrizione = x.Descrizione,
+                OrganizzatoreId = x.Organizzatore.Id,
+                DataFine = x.DataFine,
+                Titolo = x.Titolo,
+                Categoria = new CategoriaDto(x.Categoria.Descrizione, x.Categoria.Id, x.Categoria.Color)
             })
             .ToList();
         return ResponseFactory.CreateResponseFromResult(appuntamenti);
@@ -45,14 +70,24 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
             return ResponseFactory.CreateResponseFromResult(false, false,
                 "L'id dell'utente non può essere vuoto");
         }
-
+        // controllo se la categoria indicata appartiene all'utente
+        var categorie = _utente
+            .GetFirstOrDefault(x => x.Id == appuntamento.OrganizzatoreId)
+            .Categorie;
+        var isCategoriaOfUser = categorie.Any(x => x.Id == appuntamento.Categoria.Id);
+        if (!isCategoriaOfUser)
+        {
+            return ResponseFactory.CreateResponseFromResult(false, false,
+                "La categoria che è stata indicata non appartiene all'utente selezionato");
+        }
         var app = new Appuntamento
         {
             DataInizio = appuntamento.DataInizio,
             Descrizione = appuntamento.Descrizione,
             OrganizzatoreId = appuntamento.OrganizzatoreId,
             Titolo = appuntamento.Titolo,
-            DataFine = appuntamento.DataFine
+            DataFine = appuntamento.DataFine,
+            CategoriaId = appuntamento.Categoria.Id
         };
         _appuntamenti.Insert(app);
         var result = _appuntamenti.SaveChanges();
@@ -84,7 +119,8 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
                 Organizzatore = new UtenteDto(x.Utente.Id, x.Utente.Nome, x.Utente.Cognome, x.Utente.Email,
                     x.Utente.TipoUtente),
                 Titolo = x.Evento.Titolo,
-                Partecipanti = partecipanti[x.Id]
+                Partecipanti = partecipanti[x.Id],
+                Categoria = new CategoriaDto(x.Evento.Categoria.Descrizione, x.Evento.Categoria.Id, x.Evento.Categoria.Color)
             })
             .ToList();
         return ResponseFactory.CreateResponseFromResult(appuntamenti);

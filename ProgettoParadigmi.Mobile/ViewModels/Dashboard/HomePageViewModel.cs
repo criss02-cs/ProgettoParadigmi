@@ -24,13 +24,13 @@ public partial class HomePageViewModel : BaseViewModel
         Culture = CultureInfo.CreateSpecificCulture("it-IT");
         Events = new EventCollection();
         SelectedDate = DateTime.Today;
-        LoadEvents();
+        LoadEvents(DateTime.Today.Month, DateTime.Today.Year);
     }
 
-    private async Task LoadEvents()
+    private async Task LoadEvents(int month, int year)
     {
         var events =
-            await _service.GetAppuntamentiByUserId(App.UserDetails.Id, DateTime.Today.Month, DateTime.Today.Year);
+            await _service.GetAppuntamentiByUserId(App.UserDetails.Id, month, year);
         switch (events.IsSuccess)
         {
             case true when events.Result.Count > 0:
@@ -58,10 +58,10 @@ public partial class HomePageViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    public void SwipeLeft() => ChangeShownUnit(1);
+    public async Task SwipeLeft() => await ChangeShownUnit(1);
 
     [RelayCommand]
-    public void SwipeRight() => ChangeShownUnit(-1);
+    public async Task SwipeRight() => await ChangeShownUnit(-1);
 
     [RelayCommand]
     public void SwipeUp() => ShownDate = DateTime.Today;
@@ -78,7 +78,7 @@ public partial class HomePageViewModel : BaseViewModel
         }
     }
 
-    private void ChangeShownUnit(int amountToAdd)
+    private async Task ChangeShownUnit(int amountToAdd)
     {
         switch (Layout)
         {
@@ -91,6 +91,7 @@ public partial class HomePageViewModel : BaseViewModel
                 ChangeShownMonth(amountToAdd);
                 break;
         }
+        await LoadEvents(ShownDate.Month, ShownDate.Year);
     }
 
     private void ChangeShownMonth(int monthsToAdd) => ShownDate.AddMonths(monthsToAdd);

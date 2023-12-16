@@ -23,12 +23,18 @@ public partial class LoginPageViewModel(ILoginService service) : BaseViewModel
     [RelayCommand]
     public async Task Login()
     {
-        if (!ValidateEmail() || !ValidatePassword()) return;
+        IsBusy = true;
+        if (!ValidateEmail() || !ValidatePassword())
+        {
+            IsBusy = false;
+            return;
+        }
         try
         {
             var response = await _loginService.Authenticate(LoginDto);
             if (response is null)
-                response = new Response<AuthDto>();
+                response = ResponseFactory
+                    .CreateResponseFromResult<AuthDto>(null, false, "C'è stato un errore. Riprova fra poco");
             if (response.IsSuccess)
             {
                 if (Preferences.ContainsKey(nameof(App.UserDetails)))
@@ -40,17 +46,20 @@ public partial class LoginPageViewModel(ILoginService service) : BaseViewModel
                 Preferences.Set(nameof(App.UserDetails), userDetailStr);
                 App.UserDetails = response.Result;
                 App.Token = response.Result.Token;
+                IsBusy = false;
                 //TODO add flyout menu details
                 await FlyoutManager.AddFlyoutMenusDetails();
             }
             else
             {
+                IsBusy = false;
                 await AppShell.Current.DisplayAlert("Errore", response.Error, "Ok");
             }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
+            IsBusy = false;
             await AppShell.Current.DisplayAlert("Errore", e.Message, "Ok");
         }
     }

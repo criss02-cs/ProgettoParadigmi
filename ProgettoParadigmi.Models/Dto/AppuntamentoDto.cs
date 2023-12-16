@@ -13,6 +13,7 @@ public record AppuntamentoDto
     public Guid OrganizzatoreId { get; set; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<Guid> Partecipanti { get; set; }
+    public CategoriaDto Categoria { get; set; }
 }
 
 public record AppuntamentoDaAccettareDto
@@ -24,6 +25,7 @@ public record AppuntamentoDaAccettareDto
     public UtenteDto Organizzatore { get; set; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<UtenteDto> Partecipanti { get; set; }
+    public CategoriaDto Categoria { get; set; }
 }
 
 public record AggiornaStatoInvitoDto
