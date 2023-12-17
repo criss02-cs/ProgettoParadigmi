@@ -28,7 +28,7 @@ public class CategorieManager(AppuntamentiDbContext ctx)
         // e creata dallo stesso utente
         var isDuplicated = _repository
             .GetFirstOrDefault(x => x.User.Id == dto.UserId && x.Descrizione == dto.Descrizione);
-        if (isDuplicated == null)
+        if (isDuplicated != null)
         {
             return ResponseFactory
                 .CreateResponseFromResult(false, false, "E' già presente una categoria con questa descrizione");

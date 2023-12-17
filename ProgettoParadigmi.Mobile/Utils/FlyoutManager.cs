@@ -10,10 +10,10 @@ public static class FlyoutManager
     public static async Task AddFlyoutMenusDetails()
     {
         AppShell.Current.FlyoutHeader = new FlyoutHeaderControl();
-        
+
         // rimuovi tutte le pagine
-        
-        
+
+
         // aggiungi le pagine in base al tipo utente
         // se è admin avrà anche una pagina: admin dashboard
         var flyoutItem = new FlyoutItem
@@ -21,16 +21,16 @@ public static class FlyoutManager
             Title = "Home",
             Route = nameof(HomePage),
             FlyoutDisplayOptions = FlyoutDisplayOptions.AsSingleItem,
+            Icon = new FontImageSource
+            {
+                FontFamily = "FaSolid",
+                Glyph = FaSolidIcons.House,
+                Color = Colors.White
+            },
             Items =
             {
                 new ShellContent
                 {
-                    Icon = new FontImageSource
-                    {
-                        FontFamily = "FaSolid",
-                        Glyph = FaSolidIcons.House,
-                        Color = Colors.White
-                    },
                     Title = "Home",
                     ContentTemplate = new DataTemplate(typeof(HomePage))
                 }
@@ -42,6 +42,10 @@ public static class FlyoutManager
             AppShell.Current.Items.Add(flyoutItem);
         }
 
+        if (App.Categorie.Count > 0)
+        {
+            CaricaCategorie();
+        }
         // if (App.UserDetails.TipoUtente == TipoUtente.Admin)
         // {
         //     // aggiungo la pagina di login
@@ -59,5 +63,31 @@ public static class FlyoutManager
         // }
 
         await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+    }
+
+    private static void CaricaCategorie()
+    {
+        foreach (var categoria in App.Categorie)
+        {
+            var flyoutItems = new FlyoutItem
+            {
+                Title = categoria.Descrizione,
+                Icon = new FontImageSource
+                {
+                    FontFamily = "FaSolid",
+                    Color = Color.FromArgb(categoria.Color),
+                    Glyph = FaSolidIcons.Circle
+                },
+                Items =
+                {
+                    new ShellContent
+                    {
+                        Title = categoria.Descrizione
+                    }
+                },
+                Route = $"//{nameof(HomePage)}?Categoria={categoria.Id}"
+            };
+            AppShell.Current.Items.Add(flyoutItems);
+        }
     }
 }

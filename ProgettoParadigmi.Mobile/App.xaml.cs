@@ -10,17 +10,20 @@ namespace ProgettoParadigmi.Mobile;
 
 public partial class App : Application
 {
-    public static AuthDto UserDetails;
-    public static string Token;
-
+    public static AuthDto? UserDetails { get; set; }
+    public static string? Token { get; set; }
+    public static List<CategoriaDto> Categorie { get; set; } = [];
     public App()
     {
         InitializeComponent();
-        var culture = new CultureInfo("it-IT"); // Replace with your desired culture or language code
-        CultureInfo.DefaultThreadCurrentCulture = culture;
-        CultureInfo.DefaultThreadCurrentUICulture = culture;
         if (Application.Current != null) Application.Current.UserAppTheme = AppTheme.Dark;
         // Border less entry
+        ConfigureBorderLessEntry();
+        MainPage = new AppShell();
+    }
+
+    private void ConfigureBorderLessEntry()
+    {
         Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(BorderlessEntry), (handler, view) =>
         {
             if (view is BorderlessEntry)
@@ -33,6 +36,5 @@ public partial class App : Application
 #endif
             }
         });
-        MainPage = new AppShell();
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
 using ProgettoParadigmi.Mobile.Services;
 using ProgettoParadigmi.Mobile.Services.Appuntamenti;
+using ProgettoParadigmi.Mobile.Services.Categorie;
 using ProgettoParadigmi.Mobile.ViewModels.Dashboard;
 using ProgettoParadigmi.Mobile.ViewModels.Startup;
 using ProgettoParadigmi.Mobile.Views.Dashboard;
@@ -42,6 +43,7 @@ public static class MauiProgram
     {
         builder.Services.AddSingleton<ILoginService, LoginService>();
         builder.Services.AddSingleton<IAppuntamentiService, AppuntamentiService>();
+        builder.Services.AddSingleton<ICategorieService, CategorieService>();
 
         return builder;
     }

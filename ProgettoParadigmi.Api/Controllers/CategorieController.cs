@@ -11,7 +11,7 @@ namespace ProgettoParadigmi.Api.Controllers
     [ApiController, Authorize]
     public class CategorieController(AppuntamentiDbContext context) : ControllerBase
     {
-        private CategorieManager _man = new(context);
+        private readonly CategorieManager _man = new(context);
         [HttpPost, Route("Insert")]
         public IActionResult Insert([FromBody] CategoriaDto dto)
         {

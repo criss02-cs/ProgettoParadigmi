@@ -60,7 +60,7 @@ namespace ProgettoParadigmi.Api.Controllers
             }
         }
 
-        private string CreateToken(AuthDto user)
+        private string? CreateToken(AuthDto user)
         {
             var issuedAt = DateTime.UtcNow;
             var expires = DateTime.Now.AddHours(4);

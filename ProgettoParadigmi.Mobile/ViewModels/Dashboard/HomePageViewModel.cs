@@ -17,6 +17,7 @@ public partial class HomePageViewModel : BaseViewModel
     [ObservableProperty] private DateTime _shownDate = DateTime.Today;
     [ObservableProperty] private EventCollection _events;
     [ObservableProperty] private DateTime? _selectedDate;
+    public Guid CategoriaId { get; set; } = Guid.Empty;
 
     public HomePageViewModel(IAppuntamentiService service)
     {
@@ -35,6 +36,12 @@ public partial class HomePageViewModel : BaseViewModel
         {
             case true when events.Result.Count > 0:
             {
+                if (CategoriaId != Guid.Empty)
+                {
+                    events.Result = events.Result
+                        .Where(x => x.Categoria.Id == CategoriaId)
+                        .ToList();
+                }
                 var grouped = events.Result
                     .GroupBy(x => x.DataInizio)
                     .ToList();

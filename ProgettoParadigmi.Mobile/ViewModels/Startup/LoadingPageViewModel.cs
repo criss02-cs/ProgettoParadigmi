@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
+using ProgettoParadigmi.Mobile.Services.Categorie;
 using ProgettoParadigmi.Mobile.Utils;
 using ProgettoParadigmi.Mobile.Views.Dashboard;
 using ProgettoParadigmi.Mobile.Views.Startup;
@@ -9,9 +10,11 @@ namespace ProgettoParadigmi.Mobile.ViewModels.Startup;
 
 public class LoadingPageViewModel
 {
-    public LoadingPageViewModel()
+    private readonly ICategorieService _service;
+    public LoadingPageViewModel(ICategorieService service)
     {
         CheckUserLoginDetails();
+        _service = service;
     }
     private async Task CheckUserLoginDetails()
     {
@@ -33,6 +36,11 @@ public class LoadingPageViewModel
                 var userInfo = JsonSerializer.Deserialize<AuthDto>(userDetailsStr);
                 App.UserDetails = userInfo;
                 App.Token = tokenDetails;
+                var response = await _service.GetByUserId(App.UserDetails.Id);
+                if (response is { IsSuccess: true, Result: not null })
+                {
+                    App.Categorie = response.Result;
+                }
                 // TODO aggiungi flyout menu
                 await FlyoutManager.AddFlyoutMenusDetails();
             }

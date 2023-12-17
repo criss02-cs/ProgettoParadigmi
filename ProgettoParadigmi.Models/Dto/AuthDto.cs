@@ -36,6 +36,6 @@ namespace ProgettoParadigmi.Models.Dto
     public record AuthDto(string Nome, string Cognome, string Email, Guid Id, TipoUtente TipoUtente)
     {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string Token { get; set; }
+        public string? Token { get; set; }
     }
 }

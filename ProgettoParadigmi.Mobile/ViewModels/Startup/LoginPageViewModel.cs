@@ -3,12 +3,13 @@ using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ProgettoParadigmi.Mobile.Services;
+using ProgettoParadigmi.Mobile.Services.Categorie;
 using ProgettoParadigmi.Mobile.Utils;
 using ProgettoParadigmi.Models.Dto;
 
 namespace ProgettoParadigmi.Mobile.ViewModels.Startup;
 
-public partial class LoginPageViewModel(ILoginService service) : BaseViewModel
+public partial class LoginPageViewModel(ILoginService service, ICategorieService categorieService) : BaseViewModel
 {
     [ObservableProperty] private LoginDto _loginDto = new();
     [ObservableProperty] private string? _errorMessage;
@@ -46,6 +47,7 @@ public partial class LoginPageViewModel(ILoginService service) : BaseViewModel
                 Preferences.Set(nameof(App.UserDetails), userDetailStr);
                 App.UserDetails = response.Result;
                 App.Token = response.Result.Token;
+                await LoadCategorie();
                 IsBusy = false;
                 //TODO add flyout menu details
                 await FlyoutManager.AddFlyoutMenusDetails();
@@ -65,6 +67,13 @@ public partial class LoginPageViewModel(ILoginService service) : BaseViewModel
     }
 
     #endregion
+
+    private async Task LoadCategorie()
+    {
+        var response = await categorieService.GetByUserId(App.UserDetails.Id);
+        if (response is { IsSuccess: true, Result: not null }) App.Categorie = response.Result;
+        await AppShell.Current.DisplayAlert("Errore", response.Error, "Ok");
+    }
 
     private bool ValidateEmail()
     {
