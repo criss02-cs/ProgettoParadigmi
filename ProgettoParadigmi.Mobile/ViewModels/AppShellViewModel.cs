@@ -12,7 +12,7 @@ public partial class AppShellViewModel : BaseViewModel
         {
             Preferences.Remove(nameof(App.UserDetails));
         }
-
+        SecureStorage.Remove("cred");
         await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
     }
 }

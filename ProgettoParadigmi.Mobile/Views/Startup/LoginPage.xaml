@@ -8,7 +8,8 @@
              xmlns:handlers="clr-namespace:ProgettoParadigmi.Mobile.Handlers"
              x:Class="ProgettoParadigmi.Mobile.Views.Startup.LoginPage"
              Shell.NavBarIsVisible="False"
-             x:DataType="startup:LoginPageViewModel">
+             x:DataType="startup:LoginPageViewModel"
+             Appearing="LoginPage_OnAppearing">
     <ContentPage.Resources>
         <ResourceDictionary>
             <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
@@ -46,6 +47,7 @@
                     <handlers:BorderlessEntry Text="{Binding LoginDto.Email}"
                                               TextColor="{StaticResource PrimaryDarkText}"
                                               Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Email"
+                                              PlaceholderColor="Black"
                                               Keyboard="Email" />
                 </Frame>
             </StackLayout>
@@ -66,6 +68,7 @@
                         <handlers:BorderlessEntry Text="{Binding LoginDto.Password}"
                                                   TextColor="{StaticResource PrimaryDarkText}"
                                                   Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Password"
+                                                  PlaceholderColor="Black"
                                                   IsPassword="{Binding ShowPassword, Converter={StaticResource InvertedBoolConverter}}" />
                         <ImageButton Grid.Column="1"
                                      Command="{Binding TogglePasswordCommand}"

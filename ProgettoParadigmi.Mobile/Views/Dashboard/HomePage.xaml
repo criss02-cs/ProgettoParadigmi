@@ -9,7 +9,8 @@
     xmlns:font="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
     xmlns:plugin="clr-namespace:Plugin.Maui.Calendar.Controls;assembly=Plugin.Maui.Calendar"
     x:Name="advancedCalendarPage"
-    x:DataType="dashboard:HomePageViewModel">
+    x:DataType="dashboard:HomePageViewModel"
+    Appearing="HomePage_OnAppearing">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="DaysLabelStyle" TargetType="Label">

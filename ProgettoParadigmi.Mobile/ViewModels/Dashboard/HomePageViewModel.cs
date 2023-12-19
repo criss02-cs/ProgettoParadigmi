@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using Plugin.Maui.Calendar.Enums;
 using Plugin.Maui.Calendar.Models;
 using ProgettoParadigmi.Mobile.Services.Appuntamenti;
+using ProgettoParadigmi.Mobile.Utils;
 using ProgettoParadigmi.Mobile.Views.Dashboard;
 using ProgettoParadigmi.Models.Dto;
 
@@ -17,7 +18,7 @@ public partial class HomePageViewModel : BaseViewModel
     [ObservableProperty] private DateTime _shownDate = DateTime.Today;
     [ObservableProperty] private EventCollection _events;
     [ObservableProperty] private DateTime? _selectedDate;
-    public Guid CategoriaId { get; set; } = Guid.Empty;
+    public Guid CategoriaId { get; set; } = Guid.Empty; 
 
     public HomePageViewModel(IAppuntamentiService service)
     {
@@ -25,13 +26,13 @@ public partial class HomePageViewModel : BaseViewModel
         Culture = CultureInfo.CreateSpecificCulture("it-IT");
         Events = new EventCollection();
         SelectedDate = DateTime.Today;
-        LoadEvents(DateTime.Today.Month, DateTime.Today.Year);
+        LoadEvents(Tuple.Create(DateTime.Today.Month, DateTime.Today.Year));
     }
-
-    private async Task LoadEvents(int month, int year)
+    [RelayCommand]
+    public async Task LoadEvents(Tuple<int, int> data)
     {
         var events =
-            await _service.GetAppuntamentiByUserId(App.UserDetails.Id, month, year);
+            await _service.GetAppuntamentiByUserId(App.UserDetails.Id, data.Item1, data.Item2);
         switch (events.IsSuccess)
         {
             case true when events.Result.Count > 0:
@@ -47,7 +48,7 @@ public partial class HomePageViewModel : BaseViewModel
                     .ToList();
                 foreach (var g in grouped)
                 {
-                    Events.Add(g.Key, g.ToList());
+                    Events.Add(g.Key, g.ToDayEventCollection());
                 }
 
                 break;
@@ -98,7 +99,7 @@ public partial class HomePageViewModel : BaseViewModel
                 ChangeShownMonth(amountToAdd);
                 break;
         }
-        await LoadEvents(ShownDate.Month, ShownDate.Year);
+        await LoadEvents(Tuple.Create(ShownDate.Month, ShownDate.Year));
     }
 
     private void ChangeShownMonth(int monthsToAdd) => ShownDate.AddMonths(monthsToAdd);

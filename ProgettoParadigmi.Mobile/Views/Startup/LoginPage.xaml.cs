@@ -14,4 +14,12 @@ public partial class LoginPage : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
+
+    private void LoginPage_OnAppearing(object? sender, EventArgs e)
+    {
+        if (BindingContext is LoginPageViewModel vm)
+        {
+            vm.TryLoadCredentialsCommand.Execute(null);
+        }
+    }
 }

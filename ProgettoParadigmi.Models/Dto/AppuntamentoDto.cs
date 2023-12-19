@@ -4,7 +4,7 @@ using ProgettoParadigmi.Models.Entities;
 
 namespace ProgettoParadigmi.Models.Dto;
 
-public record AppuntamentoDto
+public class AppuntamentoDto
 {
     public string Titolo { get; set; }
     public string Descrizione { get; set; }

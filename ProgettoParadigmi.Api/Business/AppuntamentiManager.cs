@@ -71,9 +71,10 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
                 "L'id dell'utente non può essere vuoto");
         }
         // controllo se la categoria indicata appartiene all'utente
+        // ho dovuto mettere un includes altrimenti non caricava le categorie
         var categorie = _utente
-            .GetFirstOrDefault(x => x.Id == appuntamento.OrganizzatoreId)
-            .Categorie;
+            .GetFirstOrDefault(x => x.Id == appuntamento.OrganizzatoreId, x => x.Categorie)
+            .Categorie ?? [];
         var isCategoriaOfUser = categorie.Any(x => x.Id == appuntamento.Categoria.Id);
         if (!isCategoriaOfUser)
         {

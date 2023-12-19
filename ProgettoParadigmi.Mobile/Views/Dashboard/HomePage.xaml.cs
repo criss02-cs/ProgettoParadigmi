@@ -16,4 +16,12 @@ public partial class HomePage : ContentPage
         BindingContext = vm;
     }
     public Guid Categoria { get; set; } = Guid.Empty;
+
+    private void HomePage_OnAppearing(object? sender, EventArgs e)
+    {
+        if (BindingContext is HomePageViewModel vm)
+        {
+            vm.LoadEventsCommand.ExecuteAsync(Tuple.Create(DateTime.Now.Month, DateTime.Now.Year));
+        }
+    }
 }

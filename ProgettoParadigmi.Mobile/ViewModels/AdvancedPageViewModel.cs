@@ -31,17 +31,17 @@ public class AdvancedPageViewModel : BaseViewModel
         Events = new EventCollection
         {
             [DateTime.Now.AddDays(-3)] = new List<AdvancedEventModel>(GenerateEvents(10, "Cool")),
-            [DateTime.Now.AddDays(-6)] = new DayEventCollection<AdvancedEventModel>(Colors.Purple, Colors.Purple)
-            {
-                new AdvancedEventModel
-                {
-                    Name = "Cool event1", Description = "This is Cool event1's description!", Starting = new DateTime(), Finishing = new DateTime()
-                },
-                new AdvancedEventModel
-                {
-                    Name = "Cool event2", Description = "This is Cool event2's description!", Starting = new DateTime(), Finishing = new DateTime()
-                }
-            }
+            // [DateTime.Now.AddDays(-6)] = new DayEventCollection<AdvancedEventModel>(Colors.Purple, Colors.Purple)
+            // {
+            //     new AdvancedEventModel
+            //     {
+            //         Name = "Cool event1", Description = "This is Cool event1's description!", Starting = new DateTime(), Finishing = new DateTime()
+            //     },
+            //     new AdvancedEventModel
+            //     {
+            //         Name = "Cool event2", Description = "This is Cool event2's description!", Starting = new DateTime(), Finishing = new DateTime()
+            //     }
+            // }
         };
 
         //Adding a day with a different dot color
@@ -104,13 +104,14 @@ public class AdvancedPageViewModel : BaseViewModel
 
     private IEnumerable<AdvancedEventModel> GenerateEvents(int count, string name)
     {
-        return Enumerable.Range(1, count).Select(x => new AdvancedEventModel
-        {
-            Name = $"{name} event{x}",
-            Description = $"This is {name} event{x}'s description!",
-            Starting = new DateTime(2000, 1, 1, (x * 2) % 24, (x * 3) % 60, 0),
-            Finishing = new DateTime(2000, 1, 1, (x * 2) % 24, (x * 3) % 60, 0),
-        });
+        // return Enumerable.Range(1, count).Select(x => new AdvancedEventModel
+        // {
+        //     Name = $"{name} event{x}",
+        //     Description = $"This is {name} event{x}'s description!",
+        //     Starting = new DateTime(2000, 1, 1, (x * 2) % 24, (x * 3) % 60, 0),
+        //     Finishing = new DateTime(2000, 1, 1, (x * 2) % 24, (x * 3) % 60, 0),
+        // });
+        return [];
     }
 
     public EventCollection Events { get; }
@@ -155,12 +156,12 @@ public class AdvancedPageViewModel : BaseViewModel
 
     private async Task ExecuteEventSelectedCommand(object item)
     {
-        if (item is AdvancedEventModel eventModel)
-        {
-            var title = $"Selected: {eventModel.Name}";
-            var message = $"Starts: {eventModel.Starting:HH:mm}{Environment.NewLine}Finishes: {eventModel.Finishing:HH:mm}{Environment.NewLine}Details: {eventModel.Description}";
-            await App.Current.MainPage.DisplayAlert(title, message, "Ok");
-        }
+        // if (item is AdvancedEventModel eventModel)
+        // {
+        //     var title = $"Selected: {eventModel.Name}";
+        //     var message = $"Starts: {eventModel.Starting:HH:mm}{Environment.NewLine}Finishes: {eventModel.Finishing:HH:mm}{Environment.NewLine}Details: {eventModel.Description}";
+        //     await App.Current.MainPage.DisplayAlert(title, message, "Ok");
+        // }
     }
 
     private void ChangeShownUnit(int amountToAdd)

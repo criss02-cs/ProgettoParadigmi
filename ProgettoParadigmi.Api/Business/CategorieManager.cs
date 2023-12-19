@@ -1,3 +1,4 @@
+using ProgettoParadigmi.Api.Utils;
 using ProgettoParadigmi.Models.Context;
 using ProgettoParadigmi.Models.Dto;
 using ProgettoParadigmi.Models.Entities;
@@ -36,7 +37,7 @@ public class CategorieManager(AppuntamentiDbContext ctx)
         var categoria = new Categoria
         {
             Descrizione = dto.Descrizione,
-            Color = dto.Color,
+            Color = ColorUtils.GetRandomColor(),
             UserId = dto.UserId,
         };
         _repository.Insert(categoria);

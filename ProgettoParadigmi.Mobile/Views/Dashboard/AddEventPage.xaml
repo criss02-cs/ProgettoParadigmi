@@ -75,7 +75,10 @@
                             Grid.Column="1" TextColor="White" Format="hh:mm" />
             </Grid>
         </StackLayout>
-        
+        <Picker ItemsSource="{Binding Categorie}" 
+                Title="Seleziona una categoria" 
+                SelectedItem="{Binding CategoriaSelezionata}"
+                ItemDisplayBinding="{Binding Descrizione}"></Picker>
         <Button Text="Crea" Command="{Binding CreateEventCommand}" />
     </VerticalStackLayout>
 </ContentPage>

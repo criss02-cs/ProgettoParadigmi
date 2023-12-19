@@ -20,6 +20,17 @@ public partial class LoginPageViewModel(ILoginService service, ICategorieService
 
     [RelayCommand]
     public void TogglePassword() => ShowPassword = !ShowPassword;
+
+    [RelayCommand]
+    public async Task TryLoadCredentials()
+    {
+        var str = await SecureStorage.GetAsync("cred");
+        if (!string.IsNullOrEmpty(str))
+        {
+            var dto = JsonSerializer.Deserialize<LoginDto>(str);
+            if (dto != null) LoginDto = dto;
+        }
+    }
     
     [RelayCommand]
     public async Task Login()
@@ -42,6 +53,8 @@ public partial class LoginPageViewModel(ILoginService service, ICategorieService
                 {
                     Preferences.Remove(nameof(App.UserDetails));
                 }
+                await SecureStorage
+                    .SetAsync("cred", JsonSerializer.Serialize(LoginDto));
                 await SecureStorage.SetAsync("Token", response.Result.Token);
                 var userDetailStr = JsonSerializer.Serialize(response.Result);
                 Preferences.Set(nameof(App.UserDetails), userDetailStr);
@@ -71,8 +84,10 @@ public partial class LoginPageViewModel(ILoginService service, ICategorieService
     private async Task LoadCategorie()
     {
         var response = await categorieService.GetByUserId(App.UserDetails.Id);
-        if (response is { IsSuccess: true, Result: not null }) App.Categorie = response.Result;
-        await AppShell.Current.DisplayAlert("Errore", response.Error, "Ok");
+        if (response is { IsSuccess: true, Result: not null }) 
+            App.Categorie = response.Result;
+        else 
+            await AppShell.Current.DisplayAlert("Errore", response.Error, "Ok");
     }
 
     private bool ValidateEmail()
