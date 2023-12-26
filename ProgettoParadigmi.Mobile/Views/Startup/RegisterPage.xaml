@@ -2,14 +2,12 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:font="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
-             xmlns:startup="clr-namespace:ProgettoParadigmi.Mobile.ViewModels.Startup"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:handlers="clr-namespace:ProgettoParadigmi.Mobile.Handlers"
-             x:Class="ProgettoParadigmi.Mobile.Views.Startup.LoginPage"
-             Shell.NavBarIsVisible="False"
-             x:DataType="startup:LoginPageViewModel"
-             Appearing="LoginPage_OnAppearing">
+             xmlns:font="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
+             xmlns:startup="clr-namespace:ProgettoParadigmi.Mobile.ViewModels.Startup"
+             x:DataType="startup:RegisterPageViewModel"
+             x:Class="ProgettoParadigmi.Mobile.Views.Startup.RegisterPage">
     <ContentPage.Resources>
         <ResourceDictionary>
             <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
@@ -32,7 +30,7 @@
             </Border>
             <VerticalStackLayout Spacing="5">
                 <Label Text="Benvenuto!" FontSize="18" TextColor="White" HorizontalTextAlignment="Center" />
-                <Label Text="Accedi al tuo account" FontSize="18" TextColor="White" HorizontalTextAlignment="Center" />
+                <Label Text="Crea un nuovo account!" FontSize="18" TextColor="White" HorizontalTextAlignment="Center" />
             </VerticalStackLayout>
 
             <StackLayout Orientation="Horizontal">
@@ -44,7 +42,37 @@
                 </Frame>
                 <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
                        HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
-                    <handlers:BorderlessEntry Text="{Binding LoginDto.Email}"
+                    <handlers:BorderlessEntry Text="{Binding RegisterDto.Email}"
+                                              TextColor="{StaticResource PrimaryDarkText}"
+                                              Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Nome"
+                                              PlaceholderColor="Black" />
+                </Frame>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
+                       WidthRequest="56" CornerRadius="28">
+                    <Image
+                        Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.User},
+                    Color={StaticResource PrimaryDark}}" />
+                </Frame>
+                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                       HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
+                    <handlers:BorderlessEntry Text="{Binding RegisterDto.Email}"
+                                              TextColor="{StaticResource PrimaryDarkText}"
+                                              Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Cognome"
+                                              PlaceholderColor="Black" />
+                </Frame>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
+                       WidthRequest="56" CornerRadius="28">
+                    <Image
+                        Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Envelope},
+                    Color={StaticResource PrimaryDark}}" />
+                </Frame>
+                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                       HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
+                    <handlers:BorderlessEntry Text="{Binding RegisterDto.Email}"
                                               TextColor="{StaticResource PrimaryDarkText}"
                                               Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Email"
                                               PlaceholderColor="Black"
@@ -65,7 +93,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="30" />
                         </Grid.ColumnDefinitions>
-                        <handlers:BorderlessEntry Text="{Binding LoginDto.Password}"
+                        <handlers:BorderlessEntry Text="{Binding RegisterDto.Password}"
                                                   TextColor="{StaticResource PrimaryDarkText}"
                                                   Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Password"
                                                   PlaceholderColor="Black"
@@ -103,12 +131,12 @@
                 </Frame>
             </StackLayout>
             <Button Text="Accedi" WidthRequest="100" CornerRadius="20" HorizontalOptions="Center"
-                    Command="{Binding LoginCommand}" />
+                    Command="{Binding RegisterCommand}" />
             <StackLayout Orientation="Horizontal" Spacing="5" HorizontalOptions="Center">
-                <Label Text="Non hai un account?" TextColor="White" />
-                <Label Text="Registrati" TextColor="#50b3f2">
+                <Label Text="Hai già un account?" TextColor="White" />
+                <Label Text="Accedi" TextColor="#50b3f2">
                     <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding GoToRegisterPageCommand}" />
+                        <TapGestureRecognizer Command="{Binding GoToLoginPageCommand}" />
                     </Label.GestureRecognizers>
                 </Label>
             </StackLayout>
@@ -124,8 +152,7 @@
                 IsRunning="{Binding IsBusy}"
                 HorizontalOptions="CenterAndExpand"
                 VerticalOptions="CenterAndExpand"
-                Color="Black"/>
+                Color="Black" />
         </StackLayout>
     </AbsoluteLayout>
-
 </ContentPage>

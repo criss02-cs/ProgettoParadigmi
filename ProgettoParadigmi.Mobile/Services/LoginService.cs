@@ -27,4 +27,21 @@ public class LoginService : ILoginService
             return ResponseFactory.CreateResponseFromResult<AuthDto>(null, false, error);
         }
     }
+
+    public async Task<Response<AuthDto>?> Register(RegisterDto request)
+    {
+        using (var client = HttpClientFactory.Create())
+        {
+            var response = await client.PostAsJsonAsync($"{_authAddress}/Register", request);
+            if (response.StatusCode != HttpStatusCode.NotFound)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<Response<AuthDto>>(content, Costanti.DefaultOptions);
+                return result;
+            }
+
+            var error = await response.Content.ReadAsStringAsync();
+            return ResponseFactory.CreateResponseFromResult<AuthDto>(null, false, error);
+        }
+    }
 }

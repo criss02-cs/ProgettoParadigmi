@@ -70,6 +70,12 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
             return ResponseFactory.CreateResponseFromResult(false, false,
                 "L'id dell'utente non può essere vuoto");
         }
+
+        if (appuntamento.DataFine.HasValue && appuntamento.DataFine < appuntamento.DataInizio)
+        {
+            return ResponseFactory.CreateResponseFromResult(false, false,
+                "La data di fine non può precedere la data di inizio");
+        }
         // controllo se la categoria indicata appartiene all'utente
         // ho dovuto mettere un includes altrimenti non caricava le categorie
         var categorie = _utente

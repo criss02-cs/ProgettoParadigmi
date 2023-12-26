@@ -10,7 +10,7 @@ public static class FlyoutManager
     public static async Task AddFlyoutMenusDetails()
     {
         AppShell.Current.FlyoutHeader = new FlyoutHeaderControl();
-
+        AppShell.Current.FlyoutFooter = new FlyoutFooterControl();
         // rimuovi tutte le pagine
 
 
@@ -37,6 +37,7 @@ public static class FlyoutManager
             }
         };
         Routing.RegisterRoute(nameof(AddEventPage), typeof(AddEventPage));
+        Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
         if (!AppShell.Current.Items.Contains(flyoutItem))
         {
             AppShell.Current.Items.Add(flyoutItem);
@@ -72,6 +73,7 @@ public static class FlyoutManager
             var flyoutItems = new FlyoutItem
             {
                 Title = categoria.Descrizione,
+                FlyoutDisplayOptions = FlyoutDisplayOptions.AsSingleItem,
                 Icon = new FontImageSource
                 {
                     FontFamily = "FaSolid",

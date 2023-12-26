@@ -52,6 +52,7 @@ public static class MauiProgram
     {
         builder.Services.AddSingleton<LoadingPageViewModel>();
         builder.Services.AddSingleton<LoginPageViewModel>();
+        builder.Services.AddSingleton<RegisterPageViewModel>();
         builder.Services.AddSingleton<HomePageViewModel>();
         builder.Services.AddSingleton<AddEventPageViewModel>();
         return builder;
@@ -61,6 +62,7 @@ public static class MauiProgram
     {
         builder.Services.AddSingleton<LoadingPage>();
         builder.Services.AddSingleton<LoginPage>();
+        builder.Services.AddSingleton<RegisterPage>();
         builder.Services.AddSingleton<HomePage>();
         builder.Services.AddSingleton<AddEventPage>();
         return builder;

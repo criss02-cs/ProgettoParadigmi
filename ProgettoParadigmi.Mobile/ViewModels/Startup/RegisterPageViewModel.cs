@@ -10,41 +10,28 @@ using ProgettoParadigmi.Models.Dto;
 
 namespace ProgettoParadigmi.Mobile.ViewModels.Startup;
 
-public partial class LoginPageViewModel(ILoginService service, ICategorieService categorieService) : BaseViewModel
+public partial class RegisterPageViewModel(ILoginService service, ICategorieService categorieService) : BaseViewModel
 {
-    [ObservableProperty] private LoginDto _loginDto = new();
+    [ObservableProperty] private RegisterDto _registerDto;
     [ObservableProperty] private string? _errorMessage;
     [ObservableProperty] private bool _showPassword;
-    private readonly ILoginService _loginService = service;
-
-    #region Commands
-
+    
     [RelayCommand]
     public void TogglePassword() => ShowPassword = !ShowPassword;
 
     [RelayCommand]
-    public async Task TryLoadCredentials()
-    {
-        var str = await SecureStorage.GetAsync("cred");
-        if (!string.IsNullOrEmpty(str))
-        {
-            var dto = JsonSerializer.Deserialize<LoginDto>(str);
-            if (dto != null) LoginDto = dto;
-        }
-    }
-    
-    [RelayCommand]
-    public async Task Login()
+    public async Task Register()
     {
         IsBusy = true;
         if (!ValidateEmail() || !ValidatePassword())
         {
-            IsBusy = false;
+            ErrorMessage = "Compila tutti i campi";
             return;
         }
+
         try
         {
-            var response = await _loginService.Authenticate(LoginDto);
+            var response = await service.Register(RegisterDto);
             if (response is null)
                 response = ResponseFactory
                     .CreateResponseFromResult<AuthDto>(null, false, "C'è stato un errore. Riprova fra poco");
@@ -55,7 +42,11 @@ public partial class LoginPageViewModel(ILoginService service, ICategorieService
                     Preferences.Remove(nameof(App.UserDetails));
                 }
                 await SecureStorage
-                    .SetAsync("cred", JsonSerializer.Serialize(LoginDto));
+                    .SetAsync("cred", JsonSerializer.Serialize(new LoginDto
+                    {
+                        Email = RegisterDto.Email,
+                        Password = RegisterDto.Password
+                    }));
                 await SecureStorage.SetAsync("Token", response.Result.Token);
                 var userDetailStr = JsonSerializer.Serialize(response.Result);
                 Preferences.Set(nameof(App.UserDetails), userDetailStr);
@@ -63,7 +54,6 @@ public partial class LoginPageViewModel(ILoginService service, ICategorieService
                 App.Token = response.Result.Token;
                 await LoadCategorie();
                 IsBusy = false;
-                //TODO add flyout menu details
                 await FlyoutManager.AddFlyoutMenusDetails();
             }
             else
@@ -81,10 +71,8 @@ public partial class LoginPageViewModel(ILoginService service, ICategorieService
     }
 
     [RelayCommand]
-    private async Task GoToRegisterPage() => await Shell.Current.GoToAsync($"//{nameof(RegisterPage)}");
-
-    #endregion
-
+    private async Task GoToLoginPage() => await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+    
     private async Task LoadCategorie()
     {
         var response = await categorieService.GetByUserId(App.UserDetails.Id);
@@ -93,19 +81,19 @@ public partial class LoginPageViewModel(ILoginService service, ICategorieService
         else 
             await AppShell.Current.DisplayAlert("Errore", response.Error, "Ok");
     }
-
+    
     private bool ValidateEmail()
     {
         ErrorMessage = "";
-        if (string.IsNullOrEmpty(LoginDto.Email.Trim())
-            || string.IsNullOrEmpty(LoginDto.Password.Trim()))
+        if (string.IsNullOrEmpty(RegisterDto.Email.Trim())
+            || string.IsNullOrEmpty(RegisterDto.Password.Trim()))
         {
             ErrorMessage = "Compila tutti i campi";
             return false;
         }
 
-        if (LoginDto.Email.Contains('@')
-            && LoginDto.Email.Contains('.')) return true;
+        if (RegisterDto.Email.Contains('@')
+            && RegisterDto.Email.Contains('.')) return true;
         ErrorMessage = "L'email inserita non è valida";
         return false;
     }
@@ -113,7 +101,7 @@ public partial class LoginPageViewModel(ILoginService service, ICategorieService
     private bool ValidatePassword()
     {
         var regex = new Regex("^(?=.*[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,}$");
-        if (regex.IsMatch(LoginDto.Password)) return true;
+        if (regex.IsMatch(RegisterDto.Password)) return true;
         ErrorMessage = "La password non soddisfa i requisiti";
         return false;
     }

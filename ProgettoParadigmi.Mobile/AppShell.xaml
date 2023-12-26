@@ -19,11 +19,16 @@
                   Shell.FlyoutBehavior="Disabled"
                   ContentTemplate="{DataTemplate startup:LoginPage}"
                   Route="LoginPage" />
+    <ShellContent FlyoutItemIsVisible="False"
+                  Title="Register Page"
+                  Shell.FlyoutBehavior="Disabled"
+                  ContentTemplate="{DataTemplate startup:RegisterPage}"
+                  Route="RegisterPage"/>
 
-    <Shell.FlyoutFooter>
-        <StackLayout Padding="20">
-            <Button Text="Esci" Command="{Binding SignOutCommand}" />
-        </StackLayout>
-    </Shell.FlyoutFooter>
+    <!-- <Shell.FlyoutFooter> -->
+    <!--     <StackLayout Padding="20"> -->
+    <!--         <Button Text="Esci" Command="{Binding SignOutCommand}" /> -->
+    <!--     </StackLayout> -->
+    <!-- </Shell.FlyoutFooter> -->
 
 </Shell>
