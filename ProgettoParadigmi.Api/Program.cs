@@ -14,11 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppuntamentiDbContext>(opt =>
     // opt.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
-#if DEBUG
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
-#else
-    opt.UseSqlServer(builder.Configuration["ConnectionStrings-DefaultConnection"]
-#endif
     ));
 
 builder.Services.AddControllers();
