@@ -14,7 +14,8 @@ namespace ProgettoParadigmi.EmailSender
 
         public EmailService(IConfiguration configuration)
         {
-            var apiKey = configuration["SendGrid-ApiKey"];
+            Console.WriteLine(configuration);
+            var apiKey = configuration["SendGrid:ApiKey"];
             _client = new SendGridClient(apiKey);
             _from = new EmailAddress("cristianoaloigi0@gmail.com", "Cristiano Aloigi (admin)");
         }
