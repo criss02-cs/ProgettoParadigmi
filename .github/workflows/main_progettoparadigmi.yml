@@ -23,10 +23,10 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build ProgettoParadigmi.Api.csproj --configuration Release
+        run: dotnet build ProgettoParadigmi.Api/ProgettoParadigmi.Api.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish ProgettoParadigmi.Api.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish ProgettoParadigmi.Api/ProgettoParadigmi.Api.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
