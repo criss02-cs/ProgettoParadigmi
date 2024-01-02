@@ -3,6 +3,7 @@ using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ProgettoParadigmi.Mobile.Services.Users;
+using ProgettoParadigmi.Mobile.Views.Dashboard;
 using ProgettoParadigmi.Models.Dto;
 
 namespace ProgettoParadigmi.Mobile.ViewModels.Dashboard;
@@ -11,6 +12,17 @@ public partial class AdminPageViewModel(IUserService service) : BaseViewModel
 {
     public ObservableCollection<UtenteDto> Users { get; set; } = [];
     [ObservableProperty] private bool _isRefreshing;
+
+    [RelayCommand]
+    private async Task GoToDetail(UtenteDto utente)
+    {
+        var dto = new AuthDto(utente.Nome, utente.Cognome, utente.Cognome, utente.Id, utente.TipoUtente);
+        var parameters = new Dictionary<string, object>
+        {
+            { "UserDetails", dto }
+        };
+        await Shell.Current.GoToAsync($"{nameof(ProfilePage)}", true, parameters);
+    }
 
     [RelayCommand]
     private async Task LoadUsers()
