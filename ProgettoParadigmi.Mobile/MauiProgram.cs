@@ -5,6 +5,7 @@ using Microsoft.Maui.Hosting;
 using ProgettoParadigmi.Mobile.Services;
 using ProgettoParadigmi.Mobile.Services.Appuntamenti;
 using ProgettoParadigmi.Mobile.Services.Categorie;
+using ProgettoParadigmi.Mobile.Services.Users;
 using ProgettoParadigmi.Mobile.ViewModels.Dashboard;
 using ProgettoParadigmi.Mobile.ViewModels.Startup;
 using ProgettoParadigmi.Mobile.Views.Dashboard;
@@ -44,7 +45,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ILoginService, LoginService>();
         builder.Services.AddSingleton<IAppuntamentiService, AppuntamentiService>();
         builder.Services.AddSingleton<ICategorieService, CategorieService>();
-
+        builder.Services.AddSingleton<IUserService, UserService>();
         return builder;
     }
 
@@ -55,6 +56,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<RegisterPageViewModel>();
         builder.Services.AddSingleton<HomePageViewModel>();
         builder.Services.AddSingleton<AddEventPageViewModel>();
+        builder.Services.AddSingleton<AddCategoryPageViewModel>();
+        builder.Services.AddSingleton<AdminPageViewModel>();
         return builder;
     }
 
@@ -63,8 +66,10 @@ public static class MauiProgram
         builder.Services.AddSingleton<LoadingPage>();
         builder.Services.AddSingleton<LoginPage>();
         builder.Services.AddSingleton<RegisterPage>();
-        builder.Services.AddSingleton<HomePage>();
-        builder.Services.AddSingleton<AddEventPage>();
+        builder.Services.AddTransient<HomePage>();
+        builder.Services.AddTransient<AddEventPage>();
+        builder.Services.AddTransient<AddCategoryPage>();
+        builder.Services.AddTransient<AdminPage>();
         return builder;
     }
 }

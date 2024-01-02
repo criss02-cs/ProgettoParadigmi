@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Web;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Plugin.Maui.Calendar.Enums;
@@ -31,6 +32,7 @@ public partial class HomePageViewModel : BaseViewModel
     [RelayCommand]
     public async Task LoadEvents(Tuple<int, int> data)
     {
+        Events.Clear();
         var events =
             await _service.GetAppuntamentiByUserId(App.UserDetails.Id, data.Item1, data.Item2);
         switch (events.IsSuccess)

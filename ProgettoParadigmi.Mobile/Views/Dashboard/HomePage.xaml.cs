@@ -12,10 +12,26 @@ public partial class HomePage : ContentPage
     public HomePage(HomePageViewModel vm)
     {
         InitializeComponent();
-        vm.CategoriaId = Categoria;
+        if (!string.IsNullOrEmpty(_categoria))
+        {
+            vm.CategoriaId = Guid.Parse(_categoria);
+        }
         BindingContext = vm;
     }
-    public Guid Categoria { get; set; } = Guid.Empty;
+
+    private string _categoria = "";
+
+    public string Categoria
+    {
+        set
+        {
+            _categoria = value;
+            if (BindingContext is not HomePageViewModel vm) return;
+            vm.CategoriaId = Guid.Parse(_categoria);
+            Shell.Current.FlyoutIsPresented = false;
+            vm.LoadEventsCommand.ExecuteAsync(Tuple.Create(DateTime.Now.Month, DateTime.Now.Year));
+        }
+    }
 
     private void HomePage_OnAppearing(object? sender, EventArgs e)
     {

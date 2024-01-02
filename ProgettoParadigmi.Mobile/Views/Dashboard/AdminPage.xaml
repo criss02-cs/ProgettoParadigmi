@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dashboard="clr-namespace:ProgettoParadigmi.Mobile.ViewModels.Dashboard"
+             xmlns:dto="clr-namespace:ProgettoParadigmi.Models.Dto;assembly=ProgettoParadigmi.Models"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:utils="clr-namespace:ProgettoParadigmi.Mobile.Utils"
+             xmlns:converters="clr-namespace:ProgettoParadigmi.Mobile.Utils.Converters"
+             x:Class="ProgettoParadigmi.Mobile.Views.Dashboard.AdminPage"
+             x:DataType="dashboard:AdminPageViewModel"
+             Appearing="AdminPage_OnAppearing">
+    <ContentPage.Resources>
+        <converters:InitialsConverter x:Key="InitialsConverter" />
+    </ContentPage.Resources>
+    <AbsoluteLayout>
+        <Grid
+            ColumnDefinitions="*,*"
+            ColumnSpacing="5"
+            RowDefinitions="*, Auto"
+            RowSpacing="0"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All">
+            <RefreshView Grid.ColumnSpan="2"
+                         Command="{Binding LoadUsersCommand}"
+                         IsRefreshing="{Binding IsRefreshing}">
+                <ContentView>
+                    <CollectionView ItemsSource="{Binding Users}"
+                                    SelectionMode="Single">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="dto:UtenteDto">
+                                <Grid Padding="10"
+                                      ColumnDefinitions="50,*"
+                                      ColumnSpacing="20">
+                                    <Grid.GestureRecognizers>
+                                        <!-- <TapGestureRecognizer  -->
+                                        <!--     CommandParameter="{Binding .}" -->
+                                        <!--     Command="{}"/> -->
+                                    </Grid.GestureRecognizers>
+                                    <toolkit:AvatarView Grid.Column="0"
+                                                        BackgroundColor="{utils:RandomColor}"
+                                                        WidthRequest="50" FontSize="25" HeightRequest="50"
+                                                        CornerRadius="50"
+                                                        BorderWidth="0">
+                                        <toolkit:AvatarView.Text>
+                                            <MultiBinding Converter="{StaticResource InitialsConverter}">
+                                                <Binding Path="Nome" StringFormat="{}{0}" />
+                                                <Binding Path="Cognome" StringFormat="{}{0}" />
+                                            </MultiBinding>
+                                        </toolkit:AvatarView.Text>
+                                    </toolkit:AvatarView>
+                                    <StackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                                        <HorizontalStackLayout Spacing="5">
+                                            <Label Text="{Binding Nome}" TextColor="White" />
+                                            <Label Text="{Binding Cognome}" TextColor="White" />
+                                        </HorizontalStackLayout>
+                                        <Label Text="{Binding Email}" TextColor="White" />
+                                        <!-- <Label Text="{Binding TipoUtente}" /> -->
+                                    </StackLayout>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <StackLayout Padding="100">
+                                <Label Text="Nessun utente!" TextColor="White" />
+                            </StackLayout>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+                </ContentView>
+            </RefreshView>
+        </Grid>
+        <StackLayout
+            x:Name="aiLayout"
+            IsVisible="{Binding IsBusy}"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            BackgroundColor="Gray" Opacity="0.5">
+            <ActivityIndicator
+                x:Name="ai"
+                IsRunning="{Binding IsBusy}"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                Color="Black" />
+        </StackLayout>
+    </AbsoluteLayout>
+</ContentPage>

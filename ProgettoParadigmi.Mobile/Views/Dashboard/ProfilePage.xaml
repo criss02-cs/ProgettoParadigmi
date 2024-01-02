@@ -7,7 +7,16 @@
              xmlns:font="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
              xmlns:handlers="clr-namespace:ProgettoParadigmi.Mobile.Handlers"
              x:Class="ProgettoParadigmi.Mobile.Views.Dashboard.ProfilePage"
-             x:DataType="dashboard:ProfilePageViewModel">
+             x:DataType="dashboard:ProfilePageViewModel"
+             >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding GoToHomeCommand}" />
+    </Shell.BackButtonBehavior>
     <StackLayout Spacing="20" Padding="20">
         <toolkit:AvatarView 
             Text="{Binding Initials}"
@@ -26,7 +35,8 @@
                 <handlers:BorderlessEntry Text="{Binding UserDetails.Nome}"
                                           TextColor="{StaticResource PrimaryDarkText}"
                                           Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Nome"
-                                          PlaceholderColor="Black" IsReadOnly="True"/>
+                                          PlaceholderColor="Black" 
+                                          IsReadOnly="{Binding IsEditable, Converter={StaticResource InvertedBoolConverter}}"/>
             </Frame>
         </StackLayout>
         <StackLayout Orientation="Horizontal">
@@ -41,7 +51,8 @@
                 <handlers:BorderlessEntry Text="{Binding UserDetails.Cognome}"
                                           TextColor="{StaticResource PrimaryDarkText}"
                                           Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Nome"
-                                          PlaceholderColor="Black" IsReadOnly="True"/>
+                                          PlaceholderColor="Black" 
+                                          IsReadOnly="{Binding IsEditable, Converter={StaticResource InvertedBoolConverter}}"/>
             </Frame>
         </StackLayout>
         <StackLayout Orientation="Horizontal">
@@ -54,6 +65,22 @@
             <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
                    HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
                 <handlers:BorderlessEntry Text="{Binding UserDetails.Email}"
+                                          TextColor="{StaticResource PrimaryDarkText}"
+                                          Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Nome"
+                                          PlaceholderColor="Black" 
+                                          IsReadOnly="{Binding IsEditable, Converter={StaticResource InvertedBoolConverter}}"/>
+            </Frame>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
+                   WidthRequest="56" CornerRadius="28">
+                <!-- <Image -->
+                <!--     Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Envelope}, -->
+                <!--     Color={StaticResource PrimaryDark}}" /> -->
+            </Frame>
+            <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                   HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
+                <handlers:BorderlessEntry Text="{Binding TipoUtenteString}"
                                           TextColor="{StaticResource PrimaryDarkText}"
                                           Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Nome"
                                           PlaceholderColor="Black" IsReadOnly="True"/>

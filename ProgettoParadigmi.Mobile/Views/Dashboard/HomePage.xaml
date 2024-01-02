@@ -34,6 +34,7 @@
         Events="{Binding Events}"
         EventsScrollViewVisible="True"
         EventIndicatorTextColor="White"
+        EventIndicatorSelectedTextColor="White"
         OtherMonthDayColor="Gray"
         SelectedDate="{Binding SelectedDate}"
         ShownDate="{Binding ShownDate}"
