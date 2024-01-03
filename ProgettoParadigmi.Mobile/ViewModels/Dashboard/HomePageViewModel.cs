@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Globalization;
 using System.Web;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -27,37 +28,53 @@ public partial class HomePageViewModel : BaseViewModel
         Culture = CultureInfo.CreateSpecificCulture("it-IT");
         Events = new EventCollection();
         SelectedDate = DateTime.Today;
+        Layout = WeekLayout.Month;
         LoadEvents(Tuple.Create(DateTime.Today.Month, DateTime.Today.Year));
     }
     [RelayCommand]
     public async Task LoadEvents(Tuple<int, int> data)
     {
-        Events.Clear();
-        var events =
-            await _service.GetAppuntamentiByUserId(App.UserDetails.Id, data.Item1, data.Item2);
-        switch (events.IsSuccess)
+        if (IsBusy)
+            return;
+        try
         {
-            case true when events.Result.Count > 0:
+            IsBusy = true;
+            Events.Clear();
+            var events =
+                await _service.GetAppuntamentiByUserId(App.UserDetails.Id, data.Item1, data.Item2);
+            switch (events.IsSuccess)
             {
-                if (CategoriaId != Guid.Empty)
+                case true when events.Result.Count > 0:
                 {
-                    events.Result = events.Result
-                        .Where(x => x.Categoria.Id == CategoriaId)
-                        .ToList();
-                }
-                var grouped = events.Result
-                    .GroupBy(x => x.DataInizio)
-                    .ToList();
-                foreach (var g in grouped)
-                {
-                    Events.Add(g.Key, g.ToDayEventCollection());
-                }
+                    if (CategoriaId != Guid.Empty)
+                    {
+                        events.Result = events.Result
+                            .Where(x => x.Categoria.Id == CategoriaId)
+                            .ToList();
+                    }
 
-                break;
+                    var grouped = events.Result
+                        .GroupBy(x => x.DataInizio)
+                        .ToList();
+                    foreach (var g in grouped)
+                    {
+                        Events.Add(g.Key, g.ToDayEventCollection());
+                    }
+                    break;
+                }
+                case false:
+                    await Shell.Current.DisplayAlert("Errore", events.Error, "Ok");
+                    break;
             }
-            case false:
-                await Shell.Current.DisplayAlert("Errore", events.Error, "Ok");
-                break;
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine($"Errore nel caricamento utenti: {e.Message}");
+            await Shell.Current.DisplayAlert("Errore", e.Message, "OK");
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 
@@ -104,7 +121,7 @@ public partial class HomePageViewModel : BaseViewModel
         await LoadEvents(Tuple.Create(ShownDate.Month, ShownDate.Year));
     }
 
-    private void ChangeShownMonth(int monthsToAdd) => ShownDate.AddMonths(monthsToAdd);
+    private void ChangeShownMonth(int monthsToAdd) => ShownDate = ShownDate.AddMonths(monthsToAdd);
 
-    private void ChangeShownWeek(int weeksToAdd) => ShownDate.AddDays(weeksToAdd * 7);
+    private void ChangeShownWeek(int weeksToAdd) => ShownDate = ShownDate.AddDays(weeksToAdd * 7);
 }
