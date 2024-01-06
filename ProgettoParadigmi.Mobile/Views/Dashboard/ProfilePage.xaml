@@ -14,9 +14,9 @@
             <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior Command="{Binding GoToHomeCommand}" />
-    </Shell.BackButtonBehavior>
+    <!-- <Shell.BackButtonBehavior> -->
+    <!--     <BackButtonBehavior Command="{Binding GoToHomeCommand}" /> -->
+    <!-- </Shell.BackButtonBehavior> -->
     <StackLayout Spacing="20" Padding="20">
         <toolkit:AvatarView 
             Text="{Binding Initials}"

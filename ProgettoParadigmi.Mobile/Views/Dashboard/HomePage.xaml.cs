@@ -35,9 +35,11 @@ public partial class HomePage : ContentPage
 
     private void HomePage_OnAppearing(object? sender, EventArgs e)
     {
-        if (BindingContext is HomePageViewModel vm)
+        if (BindingContext is not HomePageViewModel vm) return;
+        if (string.IsNullOrEmpty(_categoria))
         {
-            vm.LoadEventsCommand.ExecuteAsync(Tuple.Create(DateTime.Now.Month, DateTime.Now.Year));
+            vm.CategoriaId = Guid.Empty;
         }
+        vm.LoadEventsCommand.ExecuteAsync(Tuple.Create(DateTime.Now.Month, DateTime.Now.Year));
     }
 }

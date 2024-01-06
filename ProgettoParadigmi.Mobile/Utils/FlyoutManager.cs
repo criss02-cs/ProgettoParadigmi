@@ -21,6 +21,8 @@ public static class FlyoutManager
         // registro tutte le route che non stanno sul menù a comparsa
         Routing.RegisterRoute(nameof(AddEventPage), typeof(AddEventPage));
         Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
+        Routing.RegisterRoute(nameof(EventDetailsPage), typeof(EventDetailsPage));
+        Routing.RegisterRoute(nameof(NotificationPage), typeof(NotificationPage));
 
         // Carico anche tutte le categorie, e le mostro sul menù a comparsa
         if (App.Categorie.Count > 0)
@@ -53,7 +55,7 @@ public static class FlyoutManager
                 {
                     Title = "Home",
                     ContentTemplate = new DataTemplate(typeof(HomePage)),
-                    Route = $"//{nameof(HomePage)}?Categoria={Guid.Empty.ToString()}"
+                    // Route = $"//{nameof(HomePage)}?Categoria={Guid.Empty.ToString()}"
                 }
             }
         };

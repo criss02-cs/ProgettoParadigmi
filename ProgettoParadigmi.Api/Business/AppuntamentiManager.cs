@@ -36,6 +36,37 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
                 Categoria = new CategoriaDto(x.Categoria.Descrizione, x.Categoria.Id, x.Categoria.Color)
             })
             .ToList();
+        // mi prendo anche gli eventi in cui l'utente è partecipante
+        try
+        {
+            var partecipanti = _partecipanti
+                .Query(x => x.Evento.DataInizio.Year == anno && x.Evento.DataInizio.Month == mese
+                                                             && x.StatoInvito == StatoInvito.Accettato)
+                .Select(x => x.Evento)
+                .ToList();
+            if (partecipanti.Exists(x => x.Partecipanti.Exists(y => y.UtenteId == userId)))
+            {
+                var invitati = partecipanti
+                    .Select(x => new AppuntamentoDto
+                    {
+                        DataInizio = x.DataInizio,
+                        Descrizione = x.Descrizione,
+                        OrganizzatoreId = x.Organizzatore.Id,
+                        DataFine = x.DataFine,
+                        Titolo = x.Titolo,
+                        Categoria = new CategoriaDto(x.Categoria.Descrizione, x.Categoria.Id, x.Categoria.Color)
+                    })
+                    .ToList();
+                if (invitati.Count > 0)
+                {
+                    appuntamenti.AddRange(invitati);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+        }
+        
         return ResponseFactory.CreateResponseFromResult(appuntamenti);
     }
 
@@ -76,6 +107,7 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
             return ResponseFactory.CreateResponseFromResult(false, false,
                 "La data di fine non può precedere la data di inizio");
         }
+
         // controllo se la categoria indicata appartiene all'utente
         // ho dovuto mettere un includes altrimenti non caricava le categorie
         var categorie = _utente
@@ -87,6 +119,7 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
             return ResponseFactory.CreateResponseFromResult(false, false,
                 "La categoria che è stata indicata non appartiene all'utente selezionato");
         }
+
         var app = new Appuntamento
         {
             DataInizio = appuntamento.DataInizio,
@@ -127,7 +160,8 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
                     x.Utente.TipoUtente),
                 Titolo = x.Evento.Titolo,
                 Partecipanti = partecipanti[x.Id],
-                Categoria = new CategoriaDto(x.Evento.Categoria.Descrizione, x.Evento.Categoria.Id, x.Evento.Categoria.Color)
+                Categoria = new CategoriaDto(x.Evento.Categoria.Descrizione, x.Evento.Categoria.Id,
+                    x.Evento.Categoria.Color)
             })
             .ToList();
         return ResponseFactory.CreateResponseFromResult(appuntamenti);

@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Plugin.Maui.Calendar.Enums;
 using Plugin.Maui.Calendar.Models;
+using ProgettoParadigmi.Mobile.Models;
 using ProgettoParadigmi.Mobile.Services.Appuntamenti;
 using ProgettoParadigmi.Mobile.Utils;
 using ProgettoParadigmi.Mobile.Views.Dashboard;
@@ -46,6 +47,7 @@ public partial class HomePageViewModel : BaseViewModel
             {
                 case true when events.Result.Count > 0:
                 {
+                    // Events.Clear();
                     if (CategoriaId != Guid.Empty)
                     {
                         events.Result = events.Result
@@ -96,14 +98,18 @@ public partial class HomePageViewModel : BaseViewModel
     [RelayCommand]
     public async Task EventSelected(object item)
     {
-        if (item is AppuntamentoDto eventModel)
+        if (item is AdvancedEventModel eventModel)
         {
-            var title = $"Selected: {eventModel.Titolo}";
-            var message =
-                $"Starts: {eventModel.DataInizio:HH:mm}{Environment.NewLine}Finishes: {eventModel.DataFine:HH:mm}{Environment.NewLine}Details: {eventModel.Descrizione}";
-            await App.Current.MainPage.DisplayAlert(title, message, "Ok");
+            var parameters = new Dictionary<string, object>
+            {
+                { "Appuntamento", eventModel }
+            };
+            await Shell.Current.GoToAsync($"{nameof(EventDetailsPage)}", true, parameters);
         }
     }
+
+    [RelayCommand]
+    private async Task GoToNotifications() => await Shell.Current.GoToAsync($"NotificationPage");
 
     private async Task ChangeShownUnit(int amountToAdd)
     {

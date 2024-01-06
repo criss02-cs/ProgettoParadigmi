@@ -19,7 +19,12 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding CreateNewEventCommand}" IconImageSource="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Plus}, Color={StaticResource White}}" />
+        <ToolbarItem
+            IconImageSource="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Bell}, Color={StaticResource White}}"
+            Command="{Binding GoToNotificationsCommand}"
+        />
+        <ToolbarItem Command="{Binding CreateNewEventCommand}" 
+                     IconImageSource="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Plus}, Color={StaticResource White}}" />
     </ContentPage.ToolbarItems>
     <AbsoluteLayout>
         <plugin:Calendar

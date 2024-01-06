@@ -58,6 +58,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<AddEventPageViewModel>();
         builder.Services.AddSingleton<AddCategoryPageViewModel>();
         builder.Services.AddSingleton<AdminPageViewModel>();
+        builder.Services.AddSingleton<EventDetailsViewModel>();
+        builder.Services.AddSingleton<NotificationPageViewModel>();
         return builder;
     }
 
@@ -66,10 +68,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<LoadingPage>();
         builder.Services.AddSingleton<LoginPage>();
         builder.Services.AddSingleton<RegisterPage>();
-        builder.Services.AddTransient<HomePage>();
-        builder.Services.AddTransient<AddEventPage>();
-        builder.Services.AddTransient<AddCategoryPage>();
-        builder.Services.AddTransient<AdminPage>();
+        builder.Services.AddSingleton<HomePage>();
+        builder.Services.AddSingleton<AddEventPage>();
+        builder.Services.AddSingleton<AddCategoryPage>();
+        builder.Services.AddSingleton<AdminPage>();
+        builder.Services.AddSingleton<EventDetailsPage>();
+        builder.Services.AddSingleton<NotificationPage>();
         return builder;
     }
 }

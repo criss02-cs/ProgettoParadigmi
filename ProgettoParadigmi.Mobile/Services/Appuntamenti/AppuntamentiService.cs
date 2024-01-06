@@ -48,4 +48,30 @@ public class AppuntamentiService : IAppuntamentiService
             return ResponseFactory.CreateResponseFromResult(false, false, e.Message);
         }
     }
+
+    public async Task<Response<List<AppuntamentoDaAccettareDto>>> GetAppuntamentiDaAccettare(Guid userId)
+    {
+        try
+        {
+            using (var client = HttpClientFactory.Create())
+            {
+                var response = await client.GetAsync($"{_appuntamentiUrl}/AppuntamentiDaAccettare/{userId}");
+                if (response.StatusCode != HttpStatusCode.NotFound)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var result =
+                        JsonSerializer.Deserialize<Response<List<AppuntamentoDaAccettareDto>>>(content,
+                            Costanti.DefaultOptions);
+                    return result;
+                }
+
+                var error = await response.Content.ReadAsStringAsync();
+                return ResponseFactory.CreateResponseFromResult<List<AppuntamentoDaAccettareDto>>([], false, error);
+            }
+        }
+        catch (Exception e)
+        {
+            return ResponseFactory.CreateResponseFromResult<List<AppuntamentoDaAccettareDto>>([], false, e.Message);
+        }
+    }
 }
