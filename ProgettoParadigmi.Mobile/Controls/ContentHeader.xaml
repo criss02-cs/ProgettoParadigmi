@@ -33,7 +33,7 @@
                 VerticalOptions="Center"
                 VerticalTextAlignment="Center" />
             <Border.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding PrevLayoutUnitCommand}" />
+                <TapGestureRecognizer Command="{Binding SwipeRightCommand}" />
             </Border.GestureRecognizers>
         </Border>
 
@@ -75,7 +75,7 @@
                 VerticalOptions="Center"
                 VerticalTextAlignment="Center" />
             <Border.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding NextLayoutUnitCommand}" />
+                <TapGestureRecognizer Command="{Binding SwipeLeftCommand}" />
             </Border.GestureRecognizers>
         </Border>
     </Grid>

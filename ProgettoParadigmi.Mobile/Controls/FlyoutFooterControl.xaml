@@ -7,7 +7,10 @@
              x:Class="ProgettoParadigmi.Mobile.Controls.FlyoutFooterControl"
              x:DataType="viewModels:AppShellViewModel"
              Padding="20,20,20,0"
-             Spacing="10">
+             Spacing="15">
+    <Line Stroke="{StaticResource White}" 
+          X2="{Binding Width, Source={RelativeSource Self}}"
+          Margin="0,0,0,0"/>
     <StackLayout Orientation="Horizontal"
                  Spacing="25">
         <Image Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static fonts:FaSolidIcons.User}}" />

@@ -17,6 +17,13 @@ public partial class FlyoutFooterControl : StackLayout
     private async void TapGestureRecognizer_OnTapped(object? sender, TappedEventArgs e)
     {
         Shell.Current.FlyoutIsPresented = false;
-        await Shell.Current.GoToAsync($"{nameof(ProfilePage)}");
+        var utente = App.UserDetails;
+        if (utente == null) return;
+        var parameters = new Dictionary<string, object>
+        {
+            { "UserDetails", utente }
+        };
+        await Shell.Current.GoToAsync($"{nameof(ProfilePage)}", true, parameters);
+
     }
 }

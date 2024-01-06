@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dashboard="clr-namespace:ProgettoParadigmi.Mobile.ViewModels.Dashboard"
+             xmlns:handlers="clr-namespace:ProgettoParadigmi.Mobile.Handlers"
+             Title="Crea una nuova categoria"
+             x:Class="ProgettoParadigmi.Mobile.Views.Dashboard.AddCategoryPage"
+             x:DataType="dashboard:AddCategoryPageViewModel">
+    <AbsoluteLayout>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="10"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All">
+            <Border Stroke="White" StrokeThickness="1"
+                    Padding="5,0,0,0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+                <handlers:BorderlessEntry
+                    Text="{Binding CategoriaDto.Descrizione}"
+                    Placeholder="Aggiungi titolo"
+                    PlaceholderColor="Gray"
+                    TextColor="White"/>
+            </Border>
+            <Button Text="Crea" Command="{Binding CreateCategoryCommand}" />
+        </VerticalStackLayout>
+        <StackLayout
+            x:Name="aiLayout"
+            IsVisible="{Binding IsBusy}"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            BackgroundColor="Gray" Opacity="0.5">
+            <ActivityIndicator
+                x:Name="ai"
+                IsRunning="{Binding IsBusy}"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                Color="Black"/>
+        </StackLayout>
+    </AbsoluteLayout>
+</ContentPage>

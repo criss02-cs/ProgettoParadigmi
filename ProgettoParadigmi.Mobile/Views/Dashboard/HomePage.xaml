@@ -19,35 +19,63 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding CreateNewEventCommand}" IconImageSource="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Plus}, Color={StaticResource White}}" />
+        <ToolbarItem
+            IconImageSource="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Bell}, Color={StaticResource White}}"
+            Command="{Binding GoToNotificationsCommand}"
+        />
+        <ToolbarItem Command="{Binding CreateNewEventCommand}" 
+                     IconImageSource="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Plus}, Color={StaticResource White}}" />
     </ContentPage.ToolbarItems>
-    <plugin:Calendar
-        Padding="10,0"
-        ArrowsBorderColor="Transparent"
-        ArrowsColor="White"
-        ArrowsFontFamily="FaSolid"
-        Culture="{Binding Culture}"
-        DayViewSize="40"
-        DaysLabelStyle="{StaticResource DaysLabelStyle}"
-        DaysTitleColor="White"
-        DeselectedDayTextColor="White"
-        Events="{Binding Events}"
-        EventsScrollViewVisible="True"
-        EventIndicatorTextColor="White"
-        OtherMonthDayColor="Gray"
-        SelectedDate="{Binding SelectedDate}"
-        ShownDate="{Binding ShownDate}"
-        SwipeLeftCommand="{Binding SwipeLeftCommand}"
-        SwipeRightCommand="{Binding SwipeRightCommand}"
-        SwipeUpCommand="{Binding SwipeUpCommand}"
-        TodayTextColor="White">
-        <plugin:Calendar.HeaderSectionTemplate>
-            <controls:ContentHeader />
-        </plugin:Calendar.HeaderSectionTemplate>
-        <plugin:Calendar.EventTemplate>
-            <DataTemplate>
-                <controls:CalendarEvent CalendarEventCommand="{Binding BindingContext.EventSelectedCommand, Source={x:Reference advancedCalendarPage}}" />
-            </DataTemplate>
-        </plugin:Calendar.EventTemplate>
-    </plugin:Calendar>
+    <AbsoluteLayout>
+        <plugin:Calendar
+            Padding="10,0"
+            ArrowsBorderColor="Transparent"
+            ArrowsColor="White"
+            ArrowsFontFamily="FaSolid"
+            Culture="{Binding Culture}"
+            DayViewSize="40"
+            DaysLabelStyle="{StaticResource DaysLabelStyle}"
+            DaysTitleColor="White"
+            DeselectedDayTextColor="White"
+            Events="{Binding Events}"
+            EventsScrollViewVisible="True"
+            EventIndicatorTextColor="White"
+            EventIndicatorSelectedTextColor="White"
+            OtherMonthDayColor="Gray"
+            DayViewFontSize="18"
+            DaysTitleHeight="18"
+            SelectedDate="{Binding SelectedDate}"
+            ShownDate="{Binding ShownDate}"
+            SwipeLeftCommand="{Binding SwipeLeftCommand}"
+            SwipeRightCommand="{Binding SwipeRightCommand}"
+            SwipeUpCommand="{Binding SwipeUpCommand}"
+            DaysTitleLabelFirstUpperRestLower="True"
+            DaysTitleWeekendColor="White"
+            SwipeToChangeMonthEnabled="True"
+            TodayTextColor="White"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All">
+            <plugin:Calendar.HeaderSectionTemplate>
+                <controls:ContentHeader />
+            </plugin:Calendar.HeaderSectionTemplate>
+            <plugin:Calendar.EventTemplate>
+                <DataTemplate>
+                    <controls:CalendarEvent CalendarEventCommand="{Binding BindingContext.EventSelectedCommand, Source={x:Reference advancedCalendarPage}}" />
+                </DataTemplate>
+            </plugin:Calendar.EventTemplate>
+        </plugin:Calendar>
+        <StackLayout
+            x:Name="aiLayout"
+            IsVisible="{Binding IsBusy}"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            BackgroundColor="Gray" Opacity="0.5">
+            <ActivityIndicator
+                x:Name="ai"
+                IsRunning="{Binding IsBusy}"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                Color="Black"/>
+        </StackLayout>
+    </AbsoluteLayout>
 </ContentPage>

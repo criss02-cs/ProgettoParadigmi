@@ -7,11 +7,14 @@
         Padding="15,0,0,0"
         HorizontalOptions="Fill"
         VerticalOptions="Fill">
+        <Label
+            FontSize="30"
+            FontAttributes="Bold"
+            LineBreakMode="WordWrap"
+            Text="{Binding Titolo}" />
         <Label FontAttributes="Bold" FontSize="Medium">
             <Label.FormattedText>
                 <FormattedString>
-                    <Span Text="{Binding Titolo}" FontSize="30" />
-                    <Span Text=" " />
                     <Span Text="{Binding DataInizio, StringFormat='{0:HH\\:mm}'}" 
                           TextColor="White" FontAttributes="None"/>
                     <Span Text=" - " FontAttributes="None" />
