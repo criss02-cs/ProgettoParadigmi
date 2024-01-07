@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
+using Mopups.Hosting;
 using ProgettoParadigmi.Mobile.Services;
 using ProgettoParadigmi.Mobile.Services.Appuntamenti;
 using ProgettoParadigmi.Mobile.Services.Categorie;
@@ -24,6 +25,7 @@ public static class MauiProgram
             .UseServices()
             .UseViews()
             .UseViewModels()
+            .ConfigureMopups()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
