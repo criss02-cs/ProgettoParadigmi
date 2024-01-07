@@ -16,7 +16,7 @@ public class CategorieManager(AppuntamentiDbContext ctx)
             return ResponseFactory.CreateResponseFromResult<List<CategoriaDto>>([], false,
                 "L'id non può essere vuoto");
         var categorie = _repository
-            .Query(x => x.User.Id == userId)
+            .Query(x => x.User.Id == userId && !x.IsDeleted)
             .Select(x => new CategoriaDto(x.Descrizione, x.Id, x.Color))
             .ToList();
         return ResponseFactory.CreateResponseFromResult(categorie);
@@ -28,7 +28,7 @@ public class CategorieManager(AppuntamentiDbContext ctx)
         // controllo che non ci sia una categoria con la stessa descrizione
         // e creata dallo stesso utente
         var isDuplicated = _repository
-            .GetFirstOrDefault(x => x.User.Id == dto.UserId && x.Descrizione == dto.Descrizione);
+            .GetFirstOrDefault(x => x.User.Id == dto.UserId && x.Descrizione == dto.Descrizione && !x.IsDeleted);
         if (isDuplicated != null)
         {
             return ResponseFactory

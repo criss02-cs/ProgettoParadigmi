@@ -42,4 +42,21 @@ public class UserService : IUserService
             return ResponseFactory.CreateResponseFromResult<AuthDto>(null, false, error);
         }
     }
+
+    public async Task<Response<bool>> EliminaUtente(Guid id)
+    {
+        using (var client = HttpClientFactory.Create())
+        {
+            var response = await client.GetAsync($"{_utentiAddress}/Delete/{id}");
+            if (response.StatusCode != HttpStatusCode.NotFound)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<Response<bool>>(content, Costanti.DefaultOptions);
+                return result;
+            }
+
+            var error = await response.Content.ReadAsStringAsync();
+            return ResponseFactory.CreateResponseFromResult(false, false, error);
+        }
+    }
 }

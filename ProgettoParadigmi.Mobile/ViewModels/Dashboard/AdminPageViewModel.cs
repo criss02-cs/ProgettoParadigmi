@@ -20,10 +20,11 @@ public partial class AdminPageViewModel(IUserService service) : BaseViewModel
     [RelayCommand]
     private async Task GoToDetail(UtenteDto utente)
     {
-        var dto = new AuthDto(utente.Nome, utente.Cognome, utente.Cognome, utente.Id, utente.TipoUtente);
+        var dto = new AuthDto(utente.Nome, utente.Cognome, utente.Email, utente.Id, utente.TipoUtente);
         var parameters = new Dictionary<string, object>
         {
-            { "UserDetails", dto }
+            { "UserDetails", dto },
+            { "PreviousPage", "AdminPage" }
         };
         await Shell.Current.GoToAsync($"{nameof(ProfilePage)}", true, parameters);
     }

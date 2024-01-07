@@ -25,7 +25,7 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
         if (anno == 0) anno = DateTime.Today.Year;
         var appuntamenti = _appuntamenti
             .Query(x => x.Organizzatore.Id == userId
-                        && x.DataInizio.Year == anno && x.DataInizio.Month == mese)
+                        && x.DataInizio.Year == anno && x.DataInizio.Month == mese && !x.IsDeleted)
             .Select(x => new AppuntamentoDto
             {
                 DataInizio = x.DataInizio,
@@ -41,7 +41,7 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
         {
             var partecipanti = _partecipanti
                 .Query(x => x.Evento.DataInizio.Year == anno && x.Evento.DataInizio.Month == mese
-                                                             && x.StatoInvito == StatoInvito.Accettato)
+                                                             && x.StatoInvito == StatoInvito.Accettato && !x.IsDeleted)
                 .Select(x => x.Evento)
                 .ToList();
             if (partecipanti.Exists(x => x.Partecipanti.Exists(y => y.UtenteId == userId)))
@@ -79,7 +79,7 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
         if (anno == 0) anno = DateTime.Today.Year;
         var appuntamenti = _appuntamenti
             .Query(x => x.Categoria.Id == categoriaId
-                        && x.DataInizio.Year == anno && x.DataInizio.Month == mese)
+                        && x.DataInizio.Year == anno && x.DataInizio.Month == mese && !x.IsDeleted)
             .Select(x => new AppuntamentoDto
             {
                 DataInizio = x.DataInizio,
@@ -111,7 +111,7 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
         // controllo se la categoria indicata appartiene all'utente
         // ho dovuto mettere un includes altrimenti non caricava le categorie
         var categorie = _utente
-            .GetFirstOrDefault(x => x.Id == appuntamento.OrganizzatoreId, x => x.Categorie)
+            .GetFirstOrDefault(x => x.Id == appuntamento.OrganizzatoreId && !x.IsDeleted, x => x.Categorie)
             .Categorie ?? [];
         var isCategoriaOfUser = categorie.Any(x => x.Id == appuntamento.Categoria.Id);
         if (!isCategoriaOfUser)
@@ -150,7 +150,7 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
         var appuntamenti = _partecipanti
             .Query(x => x.Utente.Id == userId && !x.IsDeleted
                                               && x.Evento.DataFine >= DateTime.Now &&
-                                              x.StatoInvito == StatoInvito.Inviato)
+                                              x.StatoInvito == StatoInvito.Inviato && !x.IsDeleted)
             .Select(x => new AppuntamentoDaAccettareDto
             {
                 DataFine = x.Evento.DataFine,
@@ -170,7 +170,7 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
     private Dictionary<Guid, List<UtenteDto>> GetAllPartecipantiAsDictionary()
     {
         var partecipanti = _partecipanti
-            .Get(includes: x => x.Utente)
+            .Get(filter: x => !x.IsDeleted,includes: x => x.Utente)
             .GroupBy(y => y.Id)
             .ToDictionary(
                 group => group.Key,
@@ -202,7 +202,7 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
         var email = new List<EmailToDto>();
         foreach (var partecipante in partecipantiId)
         {
-            var utente = _utente.GetFirstOrDefault(x => x.Id == partecipante);
+            var utente = _utente.GetFirstOrDefault(x => x.Id == partecipante && !x.IsDeleted);
             var p = new Partecipante
             {
                 EventoId = app.Id,
@@ -218,7 +218,7 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
 
         if (email.Count > 0)
         {
-            var organizzatore = _utente.GetFirstOrDefault(x => x.Id == app.OrganizzatoreId);
+            var organizzatore = _utente.GetFirstOrDefault(x => x.Id == app.OrganizzatoreId && !x.IsDeleted);
             var result = await mailService.InviaEmailInvito(email, $"{organizzatore.Nome} {organizzatore.Cognome}",
                 app.DataInizio);
             if (result)

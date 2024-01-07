@@ -21,7 +21,8 @@ public partial class FlyoutFooterControl : StackLayout
         if (utente == null) return;
         var parameters = new Dictionary<string, object>
         {
-            { "UserDetails", utente }
+            { "UserDetails", utente },
+            { "PreviousPage", "None" }
         };
         await Shell.Current.GoToAsync($"{nameof(ProfilePage)}", true, parameters);
 

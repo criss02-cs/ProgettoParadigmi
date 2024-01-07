@@ -32,6 +32,20 @@ namespace ProgettoParadigmi.Api.Controllers
             }
         }
 
+        [HttpGet, Route("Delete/{id:guid}")]
+        public IActionResult Delete(Guid id)
+        {
+            try
+            {
+                var result = _man.EliminaUtente(id);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
         [HttpPost, Route("Insert")]
         public IActionResult Insert([FromBody] RegisterDto dto)
         {
