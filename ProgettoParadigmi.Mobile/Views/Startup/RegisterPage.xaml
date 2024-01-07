@@ -42,7 +42,7 @@
                 </Frame>
                 <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
                        HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
-                    <handlers:BorderlessEntry Text="{Binding RegisterDto.Email}"
+                    <handlers:BorderlessEntry Text="{Binding RegisterDto.Nome}"
                                               TextColor="{StaticResource PrimaryDarkText}"
                                               Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Nome"
                                               PlaceholderColor="Black" />
@@ -57,7 +57,7 @@
                 </Frame>
                 <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
                        HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
-                    <handlers:BorderlessEntry Text="{Binding RegisterDto.Email}"
+                    <handlers:BorderlessEntry Text="{Binding RegisterDto.Cognome}"
                                               TextColor="{StaticResource PrimaryDarkText}"
                                               Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Cognome"
                                               PlaceholderColor="Black" />

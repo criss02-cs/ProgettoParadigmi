@@ -1,9 +1,13 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Mopups.Services;
 using ProgettoParadigmi.Mobile.Services.Users;
 using ProgettoParadigmi.Mobile.Views.Dashboard;
+using ProgettoParadigmi.Mobile.Views.Popups;
 using ProgettoParadigmi.Models.Dto;
 
 namespace ProgettoParadigmi.Mobile.ViewModels.Dashboard;
@@ -16,12 +20,43 @@ public partial class AdminPageViewModel(IUserService service) : BaseViewModel
     [RelayCommand]
     private async Task GoToDetail(UtenteDto utente)
     {
-        var dto = new AuthDto(utente.Nome, utente.Cognome, utente.Cognome, utente.Id, utente.TipoUtente);
+        var dto = new AuthDto(utente.Nome, utente.Cognome, utente.Email, utente.Id, utente.TipoUtente);
         var parameters = new Dictionary<string, object>
         {
-            { "UserDetails", dto }
+            { "UserDetails", dto },
+            { "PreviousPage", "AdminPage" }
         };
         await Shell.Current.GoToAsync($"{nameof(ProfilePage)}", true, parameters);
+    }
+
+    [RelayCommand]
+    private async Task AddNewUser()
+    {
+        var popup = new NewUserPopupPage();
+        await MopupService.Instance.PushAsync(popup);
+        var user = await popup.PopupDismissedTask;
+        // faccio la validazione anche qui perché quando clicco al di fuori del popup
+        // lui mi ritorna lo user vuoto
+        if (ValidateUser(user))
+        {
+            var result = await service.InsertNewUser(user);
+            if (result.IsSuccess)
+            {
+                await Shell.Current.DisplayAlert("", "Utente salvato con successo!", "Ok");
+                await LoadUsers();
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Errore", result.Error, "Ok");
+            }
+        }
+    }
+
+    private static bool ValidateUser(RegisterDto user)
+    {
+        var validationContext = new ValidationContext(user);
+        var validationResults = new List<ValidationResult>();
+        return Validator.TryValidateObject(user, validationContext, validationResults);
     }
 
     [RelayCommand]
@@ -40,7 +75,7 @@ public partial class AdminPageViewModel(IUserService service) : BaseViewModel
 
             if (response is { IsSuccess: true, Result: not null })
             {
-                foreach (var user in response.Result)
+                foreach (var user in response.Result.OrderBy(x => x.Nome))
                 {
                     Users.Add(user);
                 }

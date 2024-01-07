@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<pages:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:pages="clr-namespace:Mopups.Pages;assembly=Mopups"
+                 xmlns:animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                 xmlns:font="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
+                 xmlns:handlers="clr-namespace:ProgettoParadigmi.Mobile.Handlers"
+                 xmlns:popups="clr-namespace:ProgettoParadigmi.Mobile.ViewModels.Popups"
+                 xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                 x:Class="ProgettoParadigmi.Mobile.Views.Popups.NewUserPopupPage"
+                 Appearing="NewUserPopupPage_OnAppearing"
+                 Disappearing="NewUserPopupPage_OnDisappearing"
+                 x:DataType="popups:NewUserPopupPageViewModel"
+                 BackgroundColor="#80000000" CloseWhenBackgroundIsClicked="True">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation
+            DurationIn="700"
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            ScaleIn="1"
+            ScaleOut="0.7" />
+    </pages:PopupPage.Animation>
+    <StackLayout WidthRequest="350" HeightRequest="450"
+                 VerticalOptions="Center" BackgroundColor="#1f1f1f"
+                 Padding="10, 20,10,10"
+                 Spacing="10">
+        <!-- <Label TextColor="White" Text="Ciao" /> -->
+        <Border HeightRequest="100"
+                WidthRequest="100"
+                StrokeShape="RoundRectangle 80,80,80,80"
+                HorizontalOptions="Center"
+                StrokeThickness="0"
+                BackgroundColor="{StaticResource Secondary}"
+                Margin="0,0,0,0">
+            <Image Source="calendario.jpg" 
+                   HeightRequest="100" 
+                   WidthRequest="100"/>
+        </Border>
+        <StackLayout Orientation="Horizontal">
+            <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
+                   WidthRequest="56" CornerRadius="28">
+                <Image
+                    Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.User},
+                    Color={StaticResource PrimaryDark}}" />
+            </Frame>
+            <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                   HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
+                <handlers:BorderlessEntry Text="{Binding User.Nome}"
+                                          TextColor="{StaticResource PrimaryDarkText}"
+                                          Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Nome"
+                                          PlaceholderColor="Black" />
+            </Frame>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
+                   WidthRequest="56" CornerRadius="28">
+                <Image
+                    Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.User},
+                    Color={StaticResource PrimaryDark}}" />
+            </Frame>
+            <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                   HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
+                <handlers:BorderlessEntry Text="{Binding User.Cognome}"
+                                          TextColor="{StaticResource PrimaryDarkText}"
+                                          Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Cognome"
+                                          PlaceholderColor="Black" />
+            </Frame>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
+                   WidthRequest="56" CornerRadius="28">
+                <Image
+                    Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Envelope},
+                    Color={StaticResource PrimaryDark}}" />
+            </Frame>
+            <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                   HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
+                <handlers:BorderlessEntry Text="{Binding User.Email}"
+                                          TextColor="{StaticResource PrimaryDarkText}"
+                                          Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Email"
+                                          PlaceholderColor="Black"
+                                          Keyboard="Email" />
+            </Frame>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
+                   WidthRequest="56" CornerRadius="28">
+                <Image
+                    Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Lock},
+                    Color={StaticResource PrimaryDark}}" />
+            </Frame>
+            <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                   HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <handlers:BorderlessEntry Text="{Binding User.Password}"
+                                              TextColor="{StaticResource PrimaryDarkText}"
+                                              Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Password"
+                                              PlaceholderColor="Black"
+                                              IsPassword="{Binding ShowPassword, Converter={StaticResource InvertedBoolConverter}}" />
+                    <ImageButton Grid.Column="1"
+                                 Command="{Binding TogglePasswordCommand}"
+                                 BackgroundColor="Transparent"
+                                 Margin="0,0,10,0">
+                        <ImageButton.Triggers>
+                            <DataTrigger TargetType="ImageButton"
+                                         Binding="{Binding ShowPassword}"
+                                         Value="True">
+                                <Setter Property="Source">
+                                    <Setter.Value>
+                                        <FontImageSource FontFamily="FaSolid"
+                                                         Color="{StaticResource PrimaryDark}"
+                                                         Glyph="{x:Static font:FaSolidIcons.EyeSlash}" />
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="ImageButton"
+                                         Binding="{Binding ShowPassword}"
+                                         Value="False">
+                                <Setter Property="Source">
+                                    <Setter.Value>
+                                        <FontImageSource FontFamily="FaSolid"
+                                                         Color="{StaticResource PrimaryDark}"
+                                                         Glyph="{x:Static font:FaSolidIcons.Eye}" />
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </ImageButton.Triggers>
+                    </ImageButton>
+                </Grid>
+            </Frame>
+        </StackLayout>
+        <Button Text="Salva" Command="{Binding SaveCommand}"/>
+    </StackLayout>
+</pages:PopupPage>

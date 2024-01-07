@@ -20,13 +20,22 @@
             RowDefinitions="*, Auto"
             RowSpacing="0"
             AbsoluteLayout.LayoutBounds="0,0,1,1"
-            AbsoluteLayout.LayoutFlags="All">
+            AbsoluteLayout.LayoutFlags="All"
+            Padding="10,0">
             <RefreshView Grid.ColumnSpan="2"
                          Command="{Binding LoadUsersCommand}"
                          IsRefreshing="{Binding IsRefreshing}">
                 <ContentView>
                     <CollectionView ItemsSource="{Binding Users}"
                                     SelectionMode="Single">
+                        <CollectionView.EmptyView>
+                            <StackLayout>
+                                <Label Text="Nessun utente!" 
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       Padding="0,15,0,0"/>
+                            </StackLayout>
+                        </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="dto:UtenteDto">
                                 <Grid Padding="10"
@@ -53,6 +62,7 @@
                                         <HorizontalStackLayout Spacing="5">
                                             <Label Text="{Binding Nome}" TextColor="White" />
                                             <Label Text="{Binding Cognome}" TextColor="White" />
+                                            <Label Text="{Binding TipoUtente, StringFormat='({0})'}" TextColor="White"/>
                                         </HorizontalStackLayout>
                                         <Label Text="{Binding Email}" TextColor="White" />
                                         <!-- <Label Text="{Binding TipoUtente}" /> -->
@@ -60,11 +70,10 @@
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
-                        <CollectionView.EmptyView>
-                            <StackLayout Padding="100">
-                                <Label Text="Nessun utente!" TextColor="White" />
-                            </StackLayout>
-                        </CollectionView.EmptyView>
+                        
+                        <CollectionView.Footer>
+                            <Button Text="Aggiungi un utente" Command="{Binding AddNewUserCommand}" />
+                        </CollectionView.Footer>
                     </CollectionView>
                 </ContentView>
             </RefreshView>

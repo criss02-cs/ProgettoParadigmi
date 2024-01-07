@@ -9,12 +9,10 @@ namespace ProgettoParadigmi.Api.Business
     public class UtentiManager(AppuntamentiDbContext ctx)
     {
         private readonly IGenericRepository<Utente> _repository = new GenericRepository<Utente>(ctx);
-
-
         public Response<List<UtenteDto>> GetAll(int take = 10, int skip = 0)
         {
             var users = _repository
-                .Query(orderBy: x => x.OrderBy(y => y.Cognome))
+                .Query(filter: x => !x.IsDeleted, orderBy: x => x.OrderBy(y => y.Cognome))
                 .Skip(skip)
                 .Take(10)
                 .Select(x => new UtenteDto(x.Id, x.Nome, x.Cognome, x.Email, x.TipoUtente))
@@ -39,11 +37,34 @@ namespace ProgettoParadigmi.Api.Business
         {
             if (id == Guid.Empty)
                 return ResponseFactory.CreateResponseFromResult<UtenteDto>(null, false, "L'id non può essere vuoto");
-            var user = _repository.GetFirstOrDefault(x => x.Id == id);
+            var user = _repository.GetFirstOrDefault(x => x.Id == id && !x.IsDeleted);
             if (user is null)
                 return ResponseFactory.CreateResponseFromResult<UtenteDto>(null, false, "Non esiste un utente con questo id");
             var dto = new UtenteDto(user.Id, user.Nome, user.Cognome, user.Email, user.TipoUtente);
             return ResponseFactory.CreateResponseFromResult(dto);
+        }
+
+        public Response<bool> EliminaUtente(Guid id)
+        {
+            if (id == Guid.Empty)
+                return ResponseFactory.CreateResponseFromResult(false, false, "L'id non può essere vuoto");
+            var user = _repository.GetFirstOrDefault(x => x.Id == id && !x.IsDeleted);
+            if (user is null)
+                return ResponseFactory.CreateResponseFromResult(false, false, "Non esiste un utente con questo id");
+            // arrivato qui sono sicuro che l'utente esiste, e prima di eliminarlo devo eliminare anche i suoi appuntamenti
+            foreach (var evento in user.Appuntamenti)
+            {
+                evento.IsDeleted = true;
+            }
+            // e devo toglierlo anche dalle partecipazioni
+            foreach (var partecipante in user.Partecipazioni)
+            {
+                user.Partecipazioni.Remove(partecipante);
+                partecipante.IsDeleted = true;
+            }
+            user.IsDeleted = true;
+            var result = _repository.SaveChanges();
+            return ResponseFactory.CreateResponseFromResult(result);
         }
     }
 }
