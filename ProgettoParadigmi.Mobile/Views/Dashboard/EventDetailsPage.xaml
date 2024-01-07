@@ -51,7 +51,7 @@
                 </Grid.ColumnDefinitions>
                 <Label Text="Ora Inizio" TextColor="White" VerticalOptions="Center" />
                 <TimePicker Time="{Binding Appuntamento.DataInizio.TimeOfDay}"
-                            Grid.Column="1" TextColor="White" Format="hh:mm" />
+                            Grid.Column="1" TextColor="White" Format="HH:mm" />
             </Grid>
         </StackLayout>
         <StackLayout Orientation="Horizontal"
@@ -72,7 +72,7 @@
                 </Grid.ColumnDefinitions>
                 <Label Text="Ora Fine" TextColor="White" VerticalOptions="Center" />
                 <TimePicker Time="{Binding DataFine.TimeOfDay}"
-                            Grid.Column="1" TextColor="White" Format="hh:mm" />
+                            Grid.Column="1" TextColor="White" Format="HH:mm" />
             </Grid>
         </StackLayout>
         <Picker ItemsSource="{Binding Categorie}" 

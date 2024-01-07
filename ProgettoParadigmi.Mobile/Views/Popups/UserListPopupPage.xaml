@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<pages:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:popups="clr-namespace:ProgettoParadigmi.Mobile.ViewModels.Popups"
+                 xmlns:pages="clr-namespace:Mopups.Pages;assembly=Mopups"
+                 xmlns:animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                 xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                 xmlns:dto="clr-namespace:ProgettoParadigmi.Models.Dto;assembly=ProgettoParadigmi.Models"
+                 xmlns:utils="clr-namespace:ProgettoParadigmi.Mobile.Utils"
+                 xmlns:converters="clr-namespace:ProgettoParadigmi.Mobile.Utils.Converters"
+                 xmlns:fonts="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
+                 x:Class="ProgettoParadigmi.Mobile.Views.Popups.UserListPopupPage"
+                 Appearing="UserListPopupPage_OnAppearing"
+                 Disappearing="UserListPopupPage_OnDisappearing"
+                 x:DataType="popups:UserListPopupPageViewModel"
+                 BackgroundColor="#80000000" CloseWhenBackgroundIsClicked="True"
+                 BackgroundClickedCommand="{Binding ClearSelectedUsersCommand}">
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation
+            DurationIn="700"
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            ScaleIn="1"
+            ScaleOut="0.7" />
+    </pages:PopupPage.Animation>
+    <ContentPage.Resources>
+        <converters:InitialsConverter x:Key="InitialsConverter" />
+    </ContentPage.Resources>
+    <StackLayout WidthRequest="350" HeightRequest="450"
+                 VerticalOptions="Center" BackgroundColor="#1f1f1f"
+                 Padding="10, 20,10,10"
+                 Spacing="10">
+        <CollectionView SelectionMode="Multiple"
+                        x:Name="UserList"
+                        ItemsSource="{Binding Users}"
+                        SelectedItems="{Binding SelectedUsers}"
+                        SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=.}"
+                        SelectionChangedCommand="{Binding SelectionChangedCommand}">
+            <CollectionView.Header>
+                <Grid ColumnDefinitions="0.8*,0.2*" RowDefinitions="30" Padding="0,0,0,10" Margin="0,-5, 0,0">
+                    <Label Text="Seleziona degli utenti" Grid.Column="0" VerticalOptions="Center" />
+                    <ImageButton 
+                        Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static fonts:FaSolidIcons.Check}, Color=Green}"
+                        IsVisible="{Binding IsCheckVisible}" Grid.Column="1"
+                        HeightRequest="30" VerticalOptions="Center"
+                        Command="{Binding SelectCommand}"
+                        />
+                </Grid>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="dto:UtenteDto">
+                    <Grid Padding="10"
+                          ColumnDefinitions="50,*"
+                          ColumnSpacing="20">
+                        <toolkit:AvatarView Grid.Column="0"
+                                            BackgroundColor="{utils:RandomColor}"
+                                            WidthRequest="50" FontSize="25" HeightRequest="50"
+                                            CornerRadius="50"
+                                            BorderWidth="0">
+                            <toolkit:AvatarView.Text>
+                                <MultiBinding Converter="{StaticResource InitialsConverter}">
+                                    <Binding Path="Nome" StringFormat="{}{0}" />
+                                    <Binding Path="Cognome" StringFormat="{}{0}" />
+                                </MultiBinding>
+                            </toolkit:AvatarView.Text>
+                        </toolkit:AvatarView>
+                        <StackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                            <HorizontalStackLayout Spacing="5">
+                                <Label Text="{Binding Nome}" TextColor="White" />
+                                <Label Text="{Binding Cognome}" TextColor="White" />
+                                <Label Text="{Binding TipoUtente, StringFormat='({0})'}" TextColor="White" />
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding Email}" TextColor="White" />
+                            <!-- <Label Text="{Binding TipoUtente}" /> -->
+                        </StackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</pages:PopupPage>

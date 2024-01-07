@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using ProgettoParadigmi.Api.Utils;
 using ProgettoParadigmi.EmailSender;
@@ -238,7 +239,7 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
             .Select(x => new
             {
                 Organizzatore = $"{x.Organizzatore.Nome} ${x.Organizzatore.Cognome}",
-                Data = x.DataInizio.ToString("D"),
+                Data = x.DataInizio.ToString("D", new CultureInfo("it-IT")),
                 Ora = x.DataInizio.ToString("HH:mm"),
                 Emails = x.Partecipanti
                     .Select(y => new EmailToDto(y.Utente.Nome, y.Utente.Cognome, y.Utente.Email))
@@ -247,7 +248,6 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
             .Select(x =>
                 new ReminderEmailDto(x.Organizzatore, x.Data, x.Ora, x.Emails))
             .ToList();
-        // TODO creare metodo per inviare email di reminder
         await mailService.InviaEmailReminder(appuntamenti);
     }
 
