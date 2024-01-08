@@ -20,7 +20,7 @@ namespace ProgettoParadigmi.EmailSender
             _from = new EmailAddress("cristianoaloigi0@gmail.com", "Cristiano Aloigi (admin)");
         }
 
-        public async Task<bool> InviaEmailReminder(List<ReminderEmailDto> reminderEmails)
+        public async Task<bool> InviaEmailReminder(IEnumerable<ReminderEmailDto> reminderEmails)
         {
             var message = new SendGridMessage()
             {

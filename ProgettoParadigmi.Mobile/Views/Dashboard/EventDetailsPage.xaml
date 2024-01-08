@@ -19,7 +19,7 @@
                 Text="{Binding Appuntamento.Titolo}"
                 Placeholder="Aggiungi titolo"
                 PlaceholderColor="Gray"
-                TextColor="White"/>
+                TextColor="White" />
         </Border>
         <Border Stroke="White" StrokeThickness="1"
                 Padding="5,0,0,0">
@@ -30,7 +30,7 @@
                 Text="{Binding Appuntamento.Descrizione}"
                 Placeholder="Descrizione"
                 PlaceholderColor="Gray"
-                TextColor="White"/>
+                TextColor="White" />
         </Border>
         <StackLayout Orientation="Horizontal"
                      Spacing="10">
@@ -75,10 +75,28 @@
                             Grid.Column="1" TextColor="White" Format="HH:mm" />
             </Grid>
         </StackLayout>
-        <Picker ItemsSource="{Binding Categorie}" 
-                Title="Seleziona una categoria" 
+        <Picker ItemsSource="{Binding Categorie}"
+                Title="Seleziona una categoria"
                 SelectedItem="{Binding Appuntamento.Categoria}"
-                ItemDisplayBinding="{Binding Descrizione}"></Picker>
+                ItemDisplayBinding="{Binding Descrizione}">
+        </Picker>
+        <CollectionView
+            ItemsSource="{Binding Invitati}">
+            <CollectionView.Header>
+                <StackLayout Margin="0,0,0,10">
+                    <Label Text="Invitati" FontSize="20" FontAttributes="Bold" Margin="0,0,0,5" />
+                    <BoxView HeightRequest="1" Color="White" />
+                </StackLayout>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="dto:UtenteDto">
+                    <HorizontalStackLayout Spacing="5">
+                        <Label Text="{Binding Nome}" TextColor="White" FontSize="18" />
+                        <Label Text="{Binding Cognome}" TextColor="White" FontSize="18" />
+                    </HorizontalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
         <!-- <Button Text="Crea" Command="{Binding CreateEventCommand}" /> -->
     </VerticalStackLayout>
 </ContentPage>
