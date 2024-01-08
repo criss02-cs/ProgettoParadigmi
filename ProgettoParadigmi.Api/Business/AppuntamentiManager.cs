@@ -175,7 +175,8 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
                 Titolo = x.Evento.Titolo,
                 Partecipanti = partecipanti[x.Id],
                 Categoria = new CategoriaDto(x.Evento.Categoria.Descrizione, x.Evento.Categoria.Id,
-                    x.Evento.Categoria.Color)
+                    x.Evento.Categoria.Color),
+                Id = x.Evento.Id
             })
             .ToList();
         return ResponseFactory.CreateResponseFromResult(appuntamenti);

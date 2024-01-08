@@ -18,6 +18,7 @@ public class AppuntamentoDto
 
 public record AppuntamentoDaAccettareDto
 {
+    public Guid Id { get; set; }
     public string Titolo { get; set; }
     public string Descrizione { get; set; }
     public DateTime DataInizio { get; set; }
