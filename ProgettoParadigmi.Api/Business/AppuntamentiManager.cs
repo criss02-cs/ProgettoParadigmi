@@ -45,30 +45,38 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
         try
         {
             var partecipanti = _partecipanti
-                .Query(x => x.Evento.DataInizio.Year == anno && x.Evento.DataInizio.Month == mese
-                                                             && x.StatoInvito == StatoInvito.Accettato && !x.IsDeleted)
+                .Get(x => x.Evento.DataInizio.Year == anno && x.Evento.DataInizio.Month == mese
+                                                           && x.StatoInvito == StatoInvito.Accettato && !x.IsDeleted,
+                    null,
+                    x => x.Evento.Partecipanti, x => x.Evento.Categoria)
                 .Select(x => x.Evento)
                 .ToList();
             if (partecipanti.Exists(x => x.Partecipanti.Exists(y => y.UtenteId == userId)))
             {
-                var invitati = partecipanti
-                    .Select(x => new AppuntamentoDto
-                    {
-                        DataInizio = x.DataInizio,
-                        Descrizione = x.Descrizione,
-                        OrganizzatoreId = x.Organizzatore.Id,
-                        DataFine = x.DataFine,
-                        Titolo = x.Titolo,
-                        Partecipanti = x.Partecipanti
-                            .Select(y => new UtenteDto(y.Utente.Id, y.Utente.Nome, y.Utente.Cognome, y.Utente.Email,
-                                y.Utente.TipoUtente))
-                            .ToList(),
-                        Categoria = new CategoriaDto(x.Categoria.Descrizione, x.Categoria.Id, x.Categoria.Color)
-                    })
-                    .ToList();
-                if (invitati.Count > 0)
+                var utenti = _utente.Get();
+                if (utenti.Count > 0)
                 {
-                    appuntamenti.AddRange(invitati);
+                    var invitati = partecipanti
+                        .Select(x => new AppuntamentoDto
+                        {
+                            DataInizio = x.DataInizio,
+                            Descrizione = x.Descrizione,
+                            OrganizzatoreId = x.Organizzatore.Id,
+                            DataFine = x.DataFine,
+                            Titolo = x.Titolo,
+                            Partecipanti = x.Partecipanti
+                                .Select(y =>
+                                    utenti.Where(ute => ute.Id == y.UtenteId).Select(ute =>
+                                            new UtenteDto(ute.Id, ute.Nome, ute.Cognome, ute.Email, ute.TipoUtente))
+                                        .FirstOrDefault() ?? new UtenteDto(Guid.Empty, "", "", "", TipoUtente.Utente))
+                                .ToList(),
+                            Categoria = new CategoriaDto(x.Categoria.Descrizione, x.Categoria.Id, x.Categoria.Color)
+                        })
+                        .ToList();
+                    if (invitati.Count > 0)
+                    {
+                        appuntamenti.AddRange(invitati);
+                    }
                 }
             }
         }
