@@ -12,7 +12,7 @@ public class AppuntamentoDto
     public DateTime? DataFine { get; set; }
     public Guid OrganizzatoreId { get; set; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<Guid> Partecipanti { get; set; }
+    public List<UtenteDto> Partecipanti { get; set; }
     public CategoriaDto Categoria { get; set; }
 }
 

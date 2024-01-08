@@ -19,7 +19,7 @@ public partial class HomePage : ContentPage
         BindingContext = vm;
     }
 
-    private string _categoria = "";
+    private string? _categoria = "";
 
     public string Categoria
     {

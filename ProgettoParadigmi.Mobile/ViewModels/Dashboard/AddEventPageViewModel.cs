@@ -9,7 +9,7 @@ using ProgettoParadigmi.Models.Dto;
 
 namespace ProgettoParadigmi.Mobile.ViewModels.Dashboard;
 
-public partial class AddEventPageViewModel : BaseViewModel
+public partial class AddEventPageViewModel(IAppuntamentiService service, IUserService userService) : BaseViewModel
 {
     [ObservableProperty] private AppuntamentoDto _appuntamentoDto = new()
     {
@@ -18,32 +18,30 @@ public partial class AddEventPageViewModel : BaseViewModel
         DataFine = DateTime.Now.AddHours(1),
         Partecipanti = []
     };
-    private readonly IAppuntamentiService _service;
-    private readonly IUserService _userService;
+
     [ObservableProperty] private DateTime _dataFine = DateTime.Now.AddHours(1);
+    [ObservableProperty] private DateTime _dataInizio = DateTime.Now.Date;
+    [ObservableProperty] private TimeSpan _oraInizio = DateTime.Now.TimeOfDay;
+    [ObservableProperty] private TimeSpan _oraFine = DateTime.Now.AddHours(1).TimeOfDay;
     [ObservableProperty] private List<CategoriaDto> _categorie = App.Categorie;
     [ObservableProperty] private CategoriaDto _categoriaSelezionata = new("", Guid.Empty, "");
     public bool IsPartecipantiVisible => Partecipanti.Count > 0;
     public ObservableCollection<UtenteDto> Partecipanti { get; } = new();
 
-    public AddEventPageViewModel(IAppuntamentiService service, IUserService userService)
-    {
-        _service = service;
-        _userService = userService;
-    }
-
 
     [RelayCommand]
     public async Task CreateEvent()
     {
-        if (CategoriaSelezionata.Id == Guid.Empty)
+        if (CategoriaSelezionata is null || CategoriaSelezionata.Id == Guid.Empty)
         {
             await Shell.Current.DisplayAlert("Errore", "Si prega di selezionare una categoria", "Ok");
             return;
         }
         AppuntamentoDto.Categoria = CategoriaSelezionata;
-        AppuntamentoDto.Partecipanti = Partecipanti.Select(x => x.Id).ToList();
-        var result = await _service.CreaAppuntamento(AppuntamentoDto);
+        AppuntamentoDto.Partecipanti = Partecipanti.ToList();
+        AppuntamentoDto.DataInizio = DataInizio.Add(OraInizio);
+        AppuntamentoDto.DataFine = DataFine.Add(OraFine);
+        var result = await service.CreaAppuntamento(AppuntamentoDto);
         if (result is { IsSuccess: true })
         {
             await Shell.Current.DisplayAlert("", "Appuntamento creato con successo!", "Ok");
@@ -59,7 +57,7 @@ public partial class AddEventPageViewModel : BaseViewModel
     [RelayCommand]
     private async Task OpenUserList()
     {
-        var popup = new UserListPopupPage(_userService, Partecipanti.ToList());
+        var popup = new UserListPopupPage(userService, Partecipanti.ToList());
         await MopupService.Instance.PushAsync(popup);
         var result = await popup.PopupDismissedTask;
         if (result.Count > 0)

@@ -24,6 +24,10 @@ public partial class EventDetailsPage : ContentPage
         {
             if (BindingContext is not EventDetailsViewModel vm) return;
             vm.Appuntamento = value;
+            foreach (var part in value.Partecipanti)
+            {
+                vm.Invitati.Add(part);
+            }
         }
     }
 }

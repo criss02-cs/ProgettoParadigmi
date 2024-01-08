@@ -34,6 +34,10 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
                 OrganizzatoreId = x.Organizzatore.Id,
                 DataFine = x.DataFine,
                 Titolo = x.Titolo,
+                Partecipanti = x.Partecipanti
+                    .Select(y => new UtenteDto(y.Utente.Id, y.Utente.Nome, y.Utente.Cognome, y.Utente.Email,
+                        y.Utente.TipoUtente))
+                    .ToList(),
                 Categoria = new CategoriaDto(x.Categoria.Descrizione, x.Categoria.Id, x.Categoria.Color)
             })
             .ToList();
@@ -55,6 +59,10 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
                         OrganizzatoreId = x.Organizzatore.Id,
                         DataFine = x.DataFine,
                         Titolo = x.Titolo,
+                        Partecipanti = x.Partecipanti
+                            .Select(y => new UtenteDto(y.Utente.Id, y.Utente.Nome, y.Utente.Cognome, y.Utente.Email,
+                                y.Utente.TipoUtente))
+                            .ToList(),
                         Categoria = new CategoriaDto(x.Categoria.Descrizione, x.Categoria.Id, x.Categoria.Color)
                     })
                     .ToList();
@@ -67,7 +75,7 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
         catch (Exception e)
         {
         }
-        
+
         return ResponseFactory.CreateResponseFromResult(appuntamenti);
     }
 
@@ -88,6 +96,10 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
                 OrganizzatoreId = x.Organizzatore.Id,
                 DataFine = x.DataFine,
                 Titolo = x.Titolo,
+                Partecipanti = x.Partecipanti
+                    .Select(y => new UtenteDto(y.Utente.Id, y.Utente.Nome, y.Utente.Cognome, y.Utente.Email,
+                        y.Utente.TipoUtente))
+                    .ToList(),
                 Categoria = new CategoriaDto(x.Categoria.Descrizione, x.Categoria.Id, x.Categoria.Color)
             })
             .ToList();
@@ -134,7 +146,8 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
         var result = _appuntamenti.SaveChanges();
         if (result && appuntamento.Partecipanti.Count > 0)
         {
-            await InsertPartecipazioni(appuntamento.Partecipanti, app);
+            var guidId = appuntamento.Partecipanti.Select(x => x.Id).ToList();
+            await InsertPartecipazioni(guidId, app);
         }
 
         return ResponseFactory.CreateResponseFromResult(result);
@@ -171,7 +184,7 @@ public class AppuntamentiManager(AppuntamentiDbContext ctx, EmailService mailSer
     private Dictionary<Guid, List<UtenteDto>> GetAllPartecipantiAsDictionary()
     {
         var partecipanti = _partecipanti
-            .Get(filter: x => !x.IsDeleted,includes: x => x.Utente)
+            .Get(filter: x => !x.IsDeleted, includes: x => x.Utente)
             .GroupBy(y => y.Id)
             .ToDictionary(
                 group => group.Key,

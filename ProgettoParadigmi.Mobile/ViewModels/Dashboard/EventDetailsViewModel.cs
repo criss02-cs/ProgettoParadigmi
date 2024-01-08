@@ -12,6 +12,7 @@ public partial class EventDetailsViewModel(IAppuntamentiService service) : BaseV
     private AdvancedEventModel _appuntamento;
 
     public ObservableCollection<CategoriaDto> Categorie { get; } = new(App.Categorie);
+    public ObservableCollection<UtenteDto> Invitati { get; set; } = new();
     public DateTime DataFine => Appuntamento?.DataFine ?? DateTime.MinValue;
     public bool IsDataFineVisible => DataFine != DateTime.MinValue;
 }

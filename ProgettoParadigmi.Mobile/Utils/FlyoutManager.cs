@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using ProgettoParadigmi.Mobile.Controls;
 using ProgettoParadigmi.Mobile.FontModels;
@@ -13,7 +14,10 @@ public static class FlyoutManager
         AppShell.Current.FlyoutHeader = new FlyoutHeaderControl();
         AppShell.Current.FlyoutFooter = new FlyoutFooterControl();
         // rimuovo tutte le pagine
-        // AppShell.Current.Items.Clear();
+        RemovePages();
+        var newCategoria =
+            AppShell.Current.Items.FirstOrDefault(x => x.Items.Any(y => y.Title == "Crea nuova categoria"));
+        if (newCategoria is not null) AppShell.Current.Items.Remove(newCategoria);
 
         // aggiungi le pagine in base al tipo utente
         // se è admin avrà anche una pagina: admin dashboard
@@ -29,6 +33,7 @@ public static class FlyoutManager
         {
             CaricaCategorie();
         }
+
         if (App.UserDetails.TipoUtente == TipoUtente.Admin)
         {
             AddAdminDashboardPage();
@@ -36,6 +41,22 @@ public static class FlyoutManager
 
         await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
     }
+
+    private static void RemovePages()
+    {
+        var adminPage = AppShell.Current.Items.FirstOrDefault(f => f.Title == "Admin dashboard");
+        if (adminPage != null) AppShell.Current.Items.Remove(adminPage);
+        var homePage = AppShell.Current.Items.FirstOrDefault(f => f.Route == nameof(HomePage));
+        if (homePage != null) AppShell.Current.Items.Remove(homePage);
+        // Devo fare così perché la classe MenuShellItem è internal e non posso accedervi
+        var menuItems = AppShell.Current.Items.Where(x => x.GetType().Name == "MenuShellItem").ToList();
+        foreach (var item in menuItems)
+        {
+            Debug.WriteLine(item);
+            AppShell.Current.Items.Remove(item);
+        }
+    }
+
     private static void AddHomePage()
     {
         var flyoutItem = new FlyoutItem
@@ -64,6 +85,7 @@ public static class FlyoutManager
             AppShell.Current.Items.Add(flyoutItem);
         }
     }
+
     private static void AddAdminDashboardPage()
     {
         var flyoutItem = new FlyoutItem
@@ -103,7 +125,7 @@ public static class FlyoutManager
             if (color.Equals(Colors.Black))
                 color = Colors.White;
             var categoriaId = categoria.Id.ToString();
-            var menuItem = new MenuItem
+            var menuItem = new MenuFlyoutItem()
             {
                 Text = categoria.Descrizione,
                 IconImageSource = new FontImageSource
@@ -115,7 +137,6 @@ public static class FlyoutManager
                 Command = new AsyncRelayCommand(async () =>
                     await Shell.Current.GoToAsync($"//{nameof(HomePage)}?Categoria={categoriaId}")),
             };
-            // flyoutItem.Items.Add(menuItem);
             AppShell.Current.Items.Add(menuItem);
         }
 

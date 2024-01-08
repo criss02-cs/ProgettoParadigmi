@@ -25,6 +25,7 @@ public static class Extension
             Titolo = dto.Titolo,
             EventIndicatorColor = Color.FromArgb(dto.Categoria.Color),
             EventIndicatorSelectedColor = Color.FromArgb(dto.Categoria.Color),
+            Partecipanti = dto.Partecipanti
         };
         return result;
     }

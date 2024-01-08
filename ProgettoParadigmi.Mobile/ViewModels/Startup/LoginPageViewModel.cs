@@ -63,7 +63,6 @@ public partial class LoginPageViewModel(ILoginService service, ICategorieService
                 App.Token = response.Result.Token;
                 await LoadCategorie();
                 IsBusy = false;
-                //TODO add flyout menu details
                 await FlyoutManager.AddFlyoutMenusDetails();
             }
             else
