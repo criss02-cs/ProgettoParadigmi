@@ -131,7 +131,7 @@
                     </Grid>
                 </Frame>
             </StackLayout>
-            <Button Text="Accedi" WidthRequest="100" CornerRadius="20" HorizontalOptions="Center"
+            <Button Text="Registrati" WidthRequest="100" CornerRadius="20" HorizontalOptions="Center"
                     Command="{Binding RegisterCommand}" />
             <StackLayout Orientation="Horizontal" Spacing="5" HorizontalOptions="Center">
                 <Label Text="Hai già un account?" TextColor="White" />
