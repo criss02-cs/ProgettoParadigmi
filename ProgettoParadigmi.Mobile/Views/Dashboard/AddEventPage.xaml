@@ -9,6 +9,7 @@
              xmlns:font="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
              x:Class="ProgettoParadigmi.Mobile.Views.Dashboard.AddEventPage"
              Title="Crea nuovo appuntamento"
+             Appearing="AddEventPage_OnAppearing"
              x:DataType="dashboard:AddEventPageViewModel">
     <AbsoluteLayout>
         <VerticalStackLayout

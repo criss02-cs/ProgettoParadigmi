@@ -11,13 +11,8 @@ namespace ProgettoParadigmi.Mobile.ViewModels.Dashboard;
 
 public partial class AddEventPageViewModel(IAppuntamentiService service, IUserService userService) : BaseViewModel
 {
-    [ObservableProperty] private AppuntamentoDto _appuntamentoDto = new()
-    {
-        OrganizzatoreId = App.UserDetails.Id,
-        DataInizio = DateTime.Now,
-        DataFine = DateTime.Now.AddHours(1),
-        Partecipanti = []
-    };
+    [ObservableProperty] private AppuntamentoDto _appuntamentoDto = new();
+    
 
     [ObservableProperty] private DateTime _dataFine = DateTime.Now.AddHours(1);
     [ObservableProperty] private DateTime _dataInizio = DateTime.Now.Date;
