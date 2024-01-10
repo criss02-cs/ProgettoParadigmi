@@ -7,6 +7,7 @@
              xmlns:font="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
              xmlns:startup="clr-namespace:ProgettoParadigmi.Mobile.ViewModels.Startup"
              x:DataType="startup:RegisterPageViewModel"
+             Shell.NavBarIsVisible="False"
              x:Class="ProgettoParadigmi.Mobile.Views.Startup.RegisterPage">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -35,12 +36,12 @@
 
             <StackLayout Orientation="Horizontal">
                 <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
-                       WidthRequest="56" CornerRadius="28">
+                       WidthRequest="56" CornerRadius="28" BackgroundColor="White">
                     <Image
                         Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.User},
                     Color={StaticResource PrimaryDark}}" />
                 </Frame>
-                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0" BackgroundColor="White"
                        HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
                     <handlers:BorderlessEntry Text="{Binding RegisterDto.Nome}"
                                               TextColor="{StaticResource PrimaryDarkText}"
@@ -50,12 +51,12 @@
             </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
-                       WidthRequest="56" CornerRadius="28">
+                       WidthRequest="56" CornerRadius="28" BackgroundColor="White">
                     <Image
                         Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.User},
                     Color={StaticResource PrimaryDark}}" />
                 </Frame>
-                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0" BackgroundColor="White"
                        HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
                     <handlers:BorderlessEntry Text="{Binding RegisterDto.Cognome}"
                                               TextColor="{StaticResource PrimaryDarkText}"
@@ -65,12 +66,12 @@
             </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
-                       WidthRequest="56" CornerRadius="28">
+                       WidthRequest="56" CornerRadius="28" BackgroundColor="White">
                     <Image
                         Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Envelope},
                     Color={StaticResource PrimaryDark}}" />
                 </Frame>
-                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0" BackgroundColor="White"
                        HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
                     <handlers:BorderlessEntry Text="{Binding RegisterDto.Email}"
                                               TextColor="{StaticResource PrimaryDarkText}"
@@ -81,12 +82,12 @@
             </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
-                       WidthRequest="56" CornerRadius="28">
+                       WidthRequest="56" CornerRadius="28" BackgroundColor="White">
                     <Image
                         Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Lock},
                     Color={StaticResource PrimaryDark}}" />
                 </Frame>
-                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0" BackgroundColor="White"
                        HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
                     <Grid>
                         <Grid.ColumnDefinitions>

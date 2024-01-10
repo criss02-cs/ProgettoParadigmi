@@ -74,4 +74,28 @@ public class AppuntamentiService : IAppuntamentiService
             return ResponseFactory.CreateResponseFromResult<List<AppuntamentoDaAccettareDto>>([], false, e.Message);
         }
     }
+
+    public async Task<Response<bool>> AggiornaStatoInvito(AggiornaStatoInvitoDto dto)
+    {
+        try
+        {
+            using (var client = HttpClientFactory.Create())
+            {
+                var response = await client.PostAsJsonAsync($"{_appuntamentiUrl}/AggiornaStatoInvito", dto);
+                if (response.StatusCode != HttpStatusCode.NotFound)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var result = JsonSerializer.Deserialize<Response<bool>>(content, Costanti.DefaultOptions);
+                    return result;
+                }
+
+                var error = await response.Content.ReadAsStringAsync();
+                return ResponseFactory.CreateResponseFromResult(false, false, error);
+            }
+        }
+        catch (Exception e)
+        {
+            return ResponseFactory.CreateResponseFromResult(false, false, e.Message);
+        }
+    }
 }

@@ -37,13 +37,13 @@
 
             <StackLayout Orientation="Horizontal">
                 <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
-                       WidthRequest="56" CornerRadius="28">
+                       WidthRequest="56" CornerRadius="28" BackgroundColor="White">
                     <Image
                         Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.User},
                     Color={StaticResource PrimaryDark}}" />
                 </Frame>
                 <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
-                       HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
+                       HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand" BackgroundColor="White">
                     <handlers:BorderlessEntry Text="{Binding LoginDto.Email}"
                                               TextColor="{StaticResource PrimaryDarkText}"
                                               Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Email"
@@ -53,12 +53,12 @@
             </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
-                       WidthRequest="56" CornerRadius="28">
+                       WidthRequest="56" CornerRadius="28" BackgroundColor="White">
                     <Image
                         Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Lock},
                     Color={StaticResource PrimaryDark}}" />
                 </Frame>
-                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0" BackgroundColor="White"
                        HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
                     <Grid>
                         <Grid.ColumnDefinitions>

@@ -10,11 +10,11 @@ public class UserService : IUserService
 {
     private string _utentiAddress = $"{Costanti.BaseAddress}/api/Utenti";
     
-    public async Task<Response<List<UtenteDto>>> GetAllUsers(int take = 10, int skip = 0)
+    public async Task<Response<List<UtenteDto>>> GetAllUsers(int take = 10, int skip = 0, string filtro = "")
     {
         using (var client = HttpClientFactory.Create())
         {
-            var response = await client.GetAsync($"{_utentiAddress}/GetAll/{take}/{skip}");
+            var response = await client.GetAsync($"{_utentiAddress}/GetAll/{take}/{skip}/{filtro}");
             if (response.StatusCode != HttpStatusCode.NotFound)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -48,6 +48,57 @@ public class UserService : IUserService
         using (var client = HttpClientFactory.Create())
         {
             var response = await client.GetAsync($"{_utentiAddress}/Delete/{id}");
+            if (response.StatusCode != HttpStatusCode.NotFound)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<Response<bool>>(content, Costanti.DefaultOptions);
+                return result;
+            }
+
+            var error = await response.Content.ReadAsStringAsync();
+            return ResponseFactory.CreateResponseFromResult(false, false, error);
+        }
+    }
+
+    public async Task<Response<UtenteDto>> GetById(Guid id)
+    {
+        using (var client = HttpClientFactory.Create())
+        {
+            var response = await client.GetAsync($"{_utentiAddress}/{id}");
+            if (response.StatusCode != HttpStatusCode.NotFound)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<Response<UtenteDto>>(content, Costanti.DefaultOptions);
+                return result;
+            }
+
+            var error = await response.Content.ReadAsStringAsync();
+            return ResponseFactory.CreateResponseFromResult<UtenteDto>(null, false, error);
+        }
+    }
+
+    public async Task<Response<bool>> SaveUser(UtenteDto dto)
+    {
+        using (var client = HttpClientFactory.Create())
+        {
+            var response = await client.PostAsJsonAsync($"{_utentiAddress}/Update", dto);
+            if (response.StatusCode != HttpStatusCode.NotFound)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<Response<bool>>(content, Costanti.DefaultOptions);
+                return result;
+            }
+
+            var error = await response.Content.ReadAsStringAsync();
+            return ResponseFactory.CreateResponseFromResult(false, false, error);
+        }
+    }
+
+    public async Task<Response<bool>> UpdatePassword(ChangePasswordDto dto)
+    {
+        using (var client = HttpClientFactory.Create())
+        {
+            var response = await client.PostAsJsonAsync($"{_utentiAddress}/ChangePassword", dto);
             if (response.StatusCode != HttpStatusCode.NotFound)
             {
                 var content = await response.Content.ReadAsStringAsync();

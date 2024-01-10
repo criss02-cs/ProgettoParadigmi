@@ -23,6 +23,7 @@ public static class Extension
             DataInizio = dto.DataInizio,
             Descrizione = dto.Descrizione,
             Titolo = dto.Titolo,
+            OrganizzatoreId = dto.OrganizzatoreId,
             EventIndicatorColor = Color.FromArgb(dto.Categoria.Color),
             EventIndicatorSelectedColor = Color.FromArgb(dto.Categoria.Color),
             Partecipanti = dto.Partecipanti

@@ -5,78 +5,46 @@
              xmlns:handlers="clr-namespace:ProgettoParadigmi.Mobile.Handlers"
              xmlns:dashboard="clr-namespace:ProgettoParadigmi.Mobile.ViewModels.Dashboard"
              xmlns:dto="clr-namespace:ProgettoParadigmi.Models.Dto;assembly=ProgettoParadigmi.Models"
+             xmlns:ur="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:font="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ProgettoParadigmi.Mobile.Views.Dashboard.EventDetailsPage"
-             x:DataType="dashboard:EventDetailsViewModel">
+             x:DataType="dashboard:EventDetailsViewModel"
+             Title="{Binding Appuntamento.Titolo}">
+    <ContentPage.Resources>
+        <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+    </ContentPage.Resources>
     <VerticalStackLayout
         Spacing="10"
         Padding="10">
-        <Border Stroke="White" StrokeThickness="1"
-                Padding="5,0,0,0">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="10" />
-            </Border.StrokeShape>
-            <handlers:BorderlessEntry
-                Text="{Binding Appuntamento.Titolo}"
-                Placeholder="Aggiungi titolo"
-                PlaceholderColor="Gray"
-                TextColor="White" />
-        </Border>
-        <Border Stroke="White" StrokeThickness="1"
-                Padding="5,0,0,0">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="10" />
-            </Border.StrokeShape>
-            <handlers:BorderlessEntry
-                Text="{Binding Appuntamento.Descrizione}"
-                Placeholder="Descrizione"
-                PlaceholderColor="Gray"
-                TextColor="White" />
-        </Border>
-        <StackLayout Orientation="Horizontal"
-                     Spacing="10">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Text="Data Inizio" TextColor="White" VerticalOptions="Center" />
-                <DatePicker Date="{Binding Appuntamento.DataInizio.Date}"
-                            Grid.Column="1" TextColor="White"
-                            Format="dd/MM/yyyy" />
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Text="Ora Inizio" TextColor="White" VerticalOptions="Center" />
-                <TimePicker Time="{Binding Appuntamento.DataInizio.TimeOfDay}"
-                            Grid.Column="1" TextColor="White" Format="HH:mm" />
-            </Grid>
-        </StackLayout>
-        <StackLayout Orientation="Horizontal"
-                     Spacing="10" IsVisible="{Binding IsDataFineVisible}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Text="Data Fine" TextColor="White" VerticalOptions="Center" />
-                <DatePicker Date="{Binding DataFine.Date}"
-                            Grid.Column="1" TextColor="White" Format="dd/MM/yyyy" />
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Text="Ora Fine" TextColor="White" VerticalOptions="Center" />
-                <TimePicker Time="{Binding DataFine.TimeOfDay}"
-                            Grid.Column="1" TextColor="White" Format="HH:mm" />
-            </Grid>
-        </StackLayout>
+        <ur:TextField Title="Titolo" Text="{Binding Appuntamento.Titolo}"
+                      TitleColor="White" TextColor="White" TitleFontSize="18" IsReadOnly="{Binding IsAutore}" />
+        <ur:TextField Title="Descrizione" Text="{Binding Appuntamento.Descrizione}"
+                      TitleColor="White" TextColor="White" TitleFontSize="18" IsReadOnly="{Binding IsAutore}" />
+        <!-- Il campo dell'organizzatore lo faccio vedere solo se non si è l'organizzatore -->
+        <ur:TextField Text="{Binding NomeOrganizzatore}" Title="Organizzatore" IsReadOnly="True" 
+                      TitleFontSize="18"
+                      IsVisible="{Binding IsAutore, Converter={StaticResource InvertedBoolConverter}}" />
+        <Grid ColumnDefinitions="5*,5*" ColumnSpacing="10">
+            <ur:DatePickerField Title="Data Inizio" Date="{Binding Appuntamento.DataInizio.Date}"
+                                Format="dd/MM/yyyy" TitleFontSize="18" IsEnabled="{Binding IsAutore}"
+                                Icon="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Calendar}}" />
+            <ur:TimePickerField Title="Ora inizio" Format="HH:mm" IsEnabled="{Binding IsAutore}"
+                                Time="{Binding Appuntamento.DataInizio.TimeOfDay}"
+                                HorizontalOptions="Fill" TitleFontSize="18" Grid.Column="1"
+                                Icon="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Clock}}" />
+        </Grid>
+        <Grid ColumnDefinitions="5*,5*" IsVisible="{Binding IsDataFineVisible}" ColumnSpacing="10">
+            <ur:DatePickerField Title="Data Fine" Date="{Binding DataFine.Date}"
+                                Format="dd/MM/yyyy" TitleFontSize="18" IsEnabled="{Binding IsAutore}"
+                                Icon="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Calendar}}" />
+            <ur:TimePickerField Title="Ora fine" Format="HH:mm" Time="{Binding DataFine.TimeOfDay}"
+                                TitleFontSize="18" IsEnabled="{Binding IsAutore}" Grid.Column="1"
+                                Icon="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Clock}}" />
+        </Grid>
         <Picker ItemsSource="{Binding Categorie}"
                 Title="Seleziona una categoria"
+                IsVisible="{Binding IsAutore}"
                 SelectedItem="{Binding Appuntamento.Categoria}"
                 ItemDisplayBinding="{Binding Descrizione}">
         </Picker>

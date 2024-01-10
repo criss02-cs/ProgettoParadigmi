@@ -3,6 +3,7 @@ using System.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using ProgettoParadigmi.Mobile.Services.Appuntamenti;
 using ProgettoParadigmi.Models.Dto;
+using ProgettoParadigmi.Models.Entities;
 
 namespace ProgettoParadigmi.Mobile.ViewModels.Dashboard;
 
@@ -37,6 +38,35 @@ public partial class NotificationPageViewModel(IAppuntamentiService service) : B
         finally
         {
             IsBusy = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task AggiornaStatoInvito(object[] values)
+    {
+        if (values.Length > 0)
+        {
+            IsBusy = true;
+            var id = (Guid) values[0];
+            var accetta = (bool)values[1];
+            var stato = accetta ? StatoInvito.Accettato : StatoInvito.Rifiutato;
+            var dto = new AggiornaStatoInvitoDto { Stato = stato, PartecipazioneId = id };
+            var response = await service.AggiornaStatoInvito(dto);
+            if (response.IsSuccess)
+            {
+                var item = AppuntamentiDaAccettare.FirstOrDefault(x => x.Id == id);
+                if (item is not null)
+                {
+                    AppuntamentiDaAccettare.Remove(item);
+                }
+
+                IsBusy = false;
+            }
+            else
+            {
+                IsBusy = false;
+                await Shell.Current.DisplayAlert("Errore", response.Error, "Ok");
+            }
         }
     }
 }

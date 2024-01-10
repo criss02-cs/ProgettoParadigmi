@@ -7,6 +7,8 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:utils="clr-namespace:ProgettoParadigmi.Mobile.Utils"
              xmlns:converters="clr-namespace:ProgettoParadigmi.Mobile.Utils.Converters"
+             xmlns:ur="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:font="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
              x:Class="ProgettoParadigmi.Mobile.Views.Dashboard.AdminPage"
              x:DataType="dashboard:AdminPageViewModel"
              Appearing="AdminPage_OnAppearing">
@@ -18,7 +20,6 @@
             ColumnDefinitions="*,*"
             ColumnSpacing="5"
             RowDefinitions="*, Auto"
-            RowSpacing="0"
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             AbsoluteLayout.LayoutFlags="All"
             Padding="10,0">
@@ -26,55 +27,64 @@
                          Command="{Binding LoadUsersCommand}"
                          IsRefreshing="{Binding IsRefreshing}">
                 <ContentView>
-                    <CollectionView ItemsSource="{Binding Users}"
-                                    SelectionMode="Single">
-                        <CollectionView.EmptyView>
-                            <StackLayout>
-                                <Label Text="Nessun utente!" 
-                                       TextColor="White"
-                                       HorizontalOptions="Center"
-                                       Padding="0,15,0,0"/>
-                            </StackLayout>
-                        </CollectionView.EmptyView>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="dto:UtenteDto">
-                                <Grid Padding="10"
-                                      ColumnDefinitions="50,*"
-                                      ColumnSpacing="20">
-                                    <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                            CommandParameter="{Binding .}"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type dashboard:AdminPageViewModel}}, Path=GoToDetailCommand}"/>
-                                    </Grid.GestureRecognizers>
-                                    <toolkit:AvatarView Grid.Column="0"
-                                                        BackgroundColor="{utils:RandomColor}"
-                                                        WidthRequest="50" FontSize="25" HeightRequest="50"
-                                                        CornerRadius="50"
-                                                        BorderWidth="0">
-                                        <toolkit:AvatarView.Text>
-                                            <MultiBinding Converter="{StaticResource InitialsConverter}">
-                                                <Binding Path="Nome" StringFormat="{}{0}" />
-                                                <Binding Path="Cognome" StringFormat="{}{0}" />
-                                            </MultiBinding>
-                                        </toolkit:AvatarView.Text>
-                                    </toolkit:AvatarView>
-                                    <StackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
-                                        <HorizontalStackLayout Spacing="5">
-                                            <Label Text="{Binding Nome}" TextColor="White" />
-                                            <Label Text="{Binding Cognome}" TextColor="White" />
-                                            <Label Text="{Binding TipoUtente, StringFormat='({0})'}" TextColor="White"/>
-                                        </HorizontalStackLayout>
-                                        <Label Text="{Binding Email}" TextColor="White" />
-                                        <!-- <Label Text="{Binding TipoUtente}" /> -->
-                                    </StackLayout>
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                        
-                        <CollectionView.Footer>
-                            <Button Text="Aggiungi un utente" Command="{Binding AddNewUserCommand}" />
-                        </CollectionView.Footer>
-                    </CollectionView>
+                    <StackLayout>
+                        <ur:TextField Title="Search"
+                                      Icon="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.MagnifyingGlass}}"
+                                      Text="{Binding FiltroRicerca}"
+                                      ReturnCommand="{Binding SearchUserCommand}"
+                                      />
+                        <CollectionView ItemsSource="{Binding Users}"
+                                        SelectionMode="Single">
+                            <CollectionView.EmptyView>
+                                <StackLayout>
+                                    <Label Text="Nessun utente!"
+                                           TextColor="White"
+                                           HorizontalOptions="Center"
+                                           Padding="0,15,0,0" />
+                                </StackLayout>
+                            </CollectionView.EmptyView>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="dto:UtenteDto">
+                                    <Grid Padding="10"
+                                          ColumnDefinitions="50,*"
+                                          ColumnSpacing="20">
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                CommandParameter="{Binding .}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type dashboard:AdminPageViewModel}}, Path=GoToDetailCommand}" />
+                                        </Grid.GestureRecognizers>
+                                        <toolkit:AvatarView Grid.Column="0"
+                                                            BackgroundColor="{utils:RandomColor}"
+                                                            WidthRequest="50" FontSize="25" HeightRequest="50"
+                                                            CornerRadius="50"
+                                                            BorderWidth="0">
+                                            <toolkit:AvatarView.Text>
+                                                <MultiBinding Converter="{StaticResource InitialsConverter}">
+                                                    <Binding Path="Nome" StringFormat="{}{0}" />
+                                                    <Binding Path="Cognome" StringFormat="{}{0}" />
+                                                </MultiBinding>
+                                            </toolkit:AvatarView.Text>
+                                        </toolkit:AvatarView>
+                                        <StackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                                            <HorizontalStackLayout Spacing="5">
+                                                <Label Text="{Binding Nome}" TextColor="White" />
+                                                <Label Text="{Binding Cognome}" TextColor="White" />
+                                                <Label Text="{Binding TipoUtente, StringFormat='({0})'}"
+                                                       TextColor="White" />
+                                            </HorizontalStackLayout>
+                                            <Label Text="{Binding Email}" TextColor="White" />
+                                            <!-- <Label Text="{Binding TipoUtente}" /> -->
+                                        </StackLayout>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+
+                            <CollectionView.Footer>
+                                <Button Text="Aggiungi un utente" Command="{Binding AddNewUserCommand}" />
+                            </CollectionView.Footer>
+                        </CollectionView>
+                    </StackLayout>
+
                 </ContentView>
             </RefreshView>
         </Grid>

@@ -16,6 +16,7 @@ public partial class AdminPageViewModel(IUserService service) : BaseViewModel
 {
     public ObservableCollection<UtenteDto> Users { get; set; } = [];
     [ObservableProperty] private bool _isRefreshing;
+    [ObservableProperty] private string _filtroRicerca;
 
     [RelayCommand]
     private async Task GoToDetail(UtenteDto utente)
@@ -27,6 +28,13 @@ public partial class AdminPageViewModel(IUserService service) : BaseViewModel
             { "PreviousPage", "AdminPage" }
         };
         await Shell.Current.GoToAsync($"{nameof(ProfilePage)}", true, parameters);
+    }
+
+    [RelayCommand]
+    private async Task SearchUser()
+    {
+        await LoadUsers(Tuple.Create(10, 0, FiltroRicerca));
+        // Keyboard.
     }
 
     [RelayCommand]
@@ -60,14 +68,14 @@ public partial class AdminPageViewModel(IUserService service) : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task LoadUsers()
+    private async Task LoadUsers(Tuple<int, int, string>? filtri = null)
     {
         if (IsBusy)
             return;
         try
         {
             IsBusy = true;
-            var response = await service.GetAllUsers();
+            var response = await service.GetAllUsers(filtri?.Item1 ?? 10, filtri?.Item2 ?? 0, filtri?.Item3 ?? "");
             if (Users.Count != 0)
             {
                 Users.Clear();

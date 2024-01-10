@@ -37,11 +37,14 @@ public partial class AddEventPageViewModel(IAppuntamentiService service, IUserSe
             await Shell.Current.DisplayAlert("Errore", "Si prega di selezionare una categoria", "Ok");
             return;
         }
+
+        IsBusy = true;
         AppuntamentoDto.Categoria = CategoriaSelezionata;
         AppuntamentoDto.Partecipanti = Partecipanti.ToList();
         AppuntamentoDto.DataInizio = DataInizio.Add(OraInizio);
         AppuntamentoDto.DataFine = DataFine.Add(OraFine);
         var result = await service.CreaAppuntamento(AppuntamentoDto);
+        IsBusy = false;
         if (result is { IsSuccess: true })
         {
             await Shell.Current.DisplayAlert("", "Appuntamento creato con successo!", "Ok");

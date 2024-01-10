@@ -11,6 +11,7 @@ using ProgettoParadigmi.Mobile.ViewModels.Dashboard;
 using ProgettoParadigmi.Mobile.ViewModels.Startup;
 using ProgettoParadigmi.Mobile.Views.Dashboard;
 using ProgettoParadigmi.Mobile.Views.Startup;
+using UraniumUI;
 
 namespace ProgettoParadigmi.Mobile;
 
@@ -26,6 +27,8 @@ public static class MauiProgram
             .UseViews()
             .UseViewModels()
             .ConfigureMopups()
+            .UseUraniumUI()
+            .UseUraniumUIMaterial()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -34,6 +37,8 @@ public static class MauiProgram
                 fonts.AddFont("fa-solid-900.ttf", "FaSolid");
                 fonts.AddFont("TT-Commons-Bold.otf", "TTCommonsBold");
             });
+
+        builder.Services.AddMopupsDialogs();
 
 #if DEBUG
         builder.Logging.AddDebug();

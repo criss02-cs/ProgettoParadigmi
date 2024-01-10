@@ -24,9 +24,15 @@ public partial class EventDetailsPage : ContentPage
         {
             if (BindingContext is not EventDetailsViewModel vm) return;
             vm.Appuntamento = value;
+            vm.Invitati.Clear();
             foreach (var part in value.Partecipanti)
             {
                 vm.Invitati.Add(part);
+            }
+
+            if (vm.Appuntamento.OrganizzatoreId != Guid.Empty)
+            {
+                vm.LoadOrganizzatoreCommand.ExecuteAsync(null);
             }
         }
     }

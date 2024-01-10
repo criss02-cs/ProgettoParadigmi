@@ -6,55 +6,95 @@
              xmlns:dto="clr-namespace:ProgettoParadigmi.Models.Dto;assembly=ProgettoParadigmi.Models"
              x:Class="ProgettoParadigmi.Mobile.Views.Dashboard.NotificationPage"
              xmlns:font="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:converters="clr-namespace:ProgettoParadigmi.Mobile.Utils.Converters"
              x:DataType="dashboard:NotificationPageViewModel"
              Appearing="NotificationPage_OnAppearing">
-    <CollectionView
-        ItemsSource="{Binding AppuntamentiDaAccettare}">
-        <CollectionView.EmptyView>
-            <Label Text="Non ci sono appuntamenti da accettare"
-                   HorizontalOptions="Center"
-                   FontSize="18"
-                   Margin="0,20,0,0"/>
-        </CollectionView.EmptyView>
-        <CollectionView.ItemTemplate>
-            <DataTemplate x:DataType="dto:AppuntamentoDaAccettareDto">
-                <SwipeView>
-                    <SwipeView.RightItems>
-                        <SwipeItem Text="Accetta"
-                                   IconImageSource="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Check}, Color={StaticResource White}}"
-                                   BackgroundColor="Green"/>
-                        <SwipeItem Text="Rifiuta"
-                                   IconImageSource="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.x}, Color={StaticResource White}}"
-                                   BackgroundColor="Red"/>
-                    </SwipeView.RightItems>
-                    <VerticalStackLayout
-                        Padding="15,0,0,0"
-                        HorizontalOptions="Fill"
-                        VerticalOptions="Fill">
-                        <Label
-                            FontSize="30"
-                            FontAttributes="Bold"
-                            LineBreakMode="WordWrap"
-                            Text="{Binding Titolo}" />
-                        <Label FontAttributes="Bold" FontSize="Medium">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="{Binding DataInizio, StringFormat='{0:HH\\:mm}'}" 
-                                          TextColor="White" FontAttributes="None"/>
-                                    <Span Text=" - " FontAttributes="None" />
-                                    <Span Text="{Binding DataFine, StringFormat='{0:HH\\:mm}'}" 
-                                          TextColor="White" FontAttributes="None"/>
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
-                        <Label
-                            FontSize="Small"
-                            LineBreakMode="WordWrap"
-                            Text="{Binding Descrizione}" />
-                    </VerticalStackLayout>
-                </SwipeView>
-                
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
+    <ContentPage.Resources>
+        <system:Boolean x:Key="True">True</system:Boolean>
+        <system:Boolean x:Key="False">False</system:Boolean>
+        <converters:AggiornaInvitoConverter x:Key="AggiornaInvitoConverter" />
+    </ContentPage.Resources>
+    <AbsoluteLayout>
+        <CollectionView
+            x:Name="CollectionView"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            ItemsSource="{Binding AppuntamentiDaAccettare}">
+            <CollectionView.EmptyView>
+                <Label Text="Non ci sono appuntamenti da accettare"
+                       HorizontalOptions="Center"
+                       FontSize="18"
+                       Margin="0,20,0,0" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="dto:AppuntamentoDaAccettareDto">
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItem Text="Accetta"
+                                       Command="{Binding Source={x:Reference CollectionView}, Path=BindingContext.AggiornaStatoInvitoCommand}"
+                                       IconImageSource="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Check}, Color={StaticResource White}}"
+                                       BackgroundColor="Green">
+                                <SwipeItem.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource AggiornaInvitoConverter}">
+                                        <Binding Path="Id" />
+                                        <Binding Source="{StaticResource True}" Path="." />
+                                    </MultiBinding>
+                                </SwipeItem.CommandParameter>
+                            </SwipeItem>
+                            <SwipeItem Text="Rifiuta"
+                                       Command="{Binding Source={x:Reference CollectionView}, Path=BindingContext.AggiornaStatoInvitoCommand}"
+                                       IconImageSource="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.x}, Color={StaticResource White}}"
+                                       BackgroundColor="Red">
+                                <SwipeItem.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource AggiornaInvitoConverter}">
+                                        <Binding Path="Id" />
+                                        <Binding Source="{StaticResource False}" Path="." />
+                                    </MultiBinding>
+                                </SwipeItem.CommandParameter>
+                            </SwipeItem>
+                        </SwipeView.RightItems>
+                        <VerticalStackLayout
+                            Padding="15,0,0,0"
+                            HorizontalOptions="Fill"
+                            VerticalOptions="Fill">
+                            <Label
+                                FontSize="30"
+                                FontAttributes="Bold"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding Titolo}" />
+                            <Label FontAttributes="Bold" FontSize="Medium">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding DataInizio, StringFormat='{0:HH\\:mm}'}"
+                                              TextColor="White" FontAttributes="None" />
+                                        <Span Text=" - " FontAttributes="None" />
+                                        <Span Text="{Binding DataFine, StringFormat='{0:HH\\:mm}'}"
+                                              TextColor="White" FontAttributes="None" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label
+                                FontSize="Small"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding Descrizione}" />
+                        </VerticalStackLayout>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <StackLayout
+            x:Name="aiLayout"
+            IsVisible="{Binding IsBusy}"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            BackgroundColor="Gray" Opacity="0.5">
+            <ActivityIndicator
+                x:Name="ai"
+                IsRunning="{Binding IsBusy}"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                Color="Black" />
+        </StackLayout>
+    </AbsoluteLayout>
 </ContentPage>

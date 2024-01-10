@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ProgettoParadigmi.Mobile.Services.Users;
 using ProgettoParadigmi.Mobile.ViewModels.Dashboard;
 using ProgettoParadigmi.Models.Dto;
+using UraniumUI.Dialogs;
 
 namespace ProgettoParadigmi.Mobile.Views.Dashboard;
 
@@ -13,11 +14,14 @@ namespace ProgettoParadigmi.Mobile.Views.Dashboard;
 [QueryProperty(nameof(PreviousPage), nameof(PreviousPage))]
 public partial class ProfilePage : ContentPage
 {
-    public ProfilePage(IUserService service)
+    public ProfilePage()
     {
         InitializeComponent();
-        BindingContext = new ProfilePageViewModel(service);
+        var service = Application.Current.Handler.MauiContext?.Services.GetService<IUserService>();
+        var dialogService = Application.Current.Handler.MauiContext?.Services.GetService<IDialogService>();
+        if (service != null) BindingContext = new ProfilePageViewModel(service, dialogService);
     }
+
 
     public AuthDto UserDetails
     {

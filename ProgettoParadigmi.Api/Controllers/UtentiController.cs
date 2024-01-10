@@ -18,12 +18,26 @@ namespace ProgettoParadigmi.Api.Controllers
         private UtentiManager _man = new(ctx);
         private AuthManager _authManager = new(ctx);
 
-        [HttpGet, Route("GetAll/{take?}/{skip?}")]
-        public IActionResult GetAll(int take = 10, int skip = 0)
+        [HttpGet, Route("GetAll/{take?}/{skip?}/{filtro?}")]
+        public IActionResult GetAll(int take = 10, int skip = 0, string filtro = "")
         {
             try
             {
-                var result = _man.GetAll(take, skip);
+                var result = _man.GetAll(take, skip, filtro);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost, Route("Update")]
+        public IActionResult UpdateUser([FromBody] UtenteDto dto)
+        {
+            try
+            {
+                var result = _man.UpdateUser(dto);
                 return Ok(result);
             }
             catch (Exception e)

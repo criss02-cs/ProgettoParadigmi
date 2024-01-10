@@ -33,6 +33,23 @@ public static class FlyoutManager
         {
             CaricaCategorie();
         }
+        var flyoutItem = new FlyoutItem()
+        {
+            FlyoutDisplayOptions = FlyoutDisplayOptions.AsMultipleItems
+        };
+        var addCategoriaItem = new ShellContent
+        {
+            Title = "Crea nuova categoria",
+            ContentTemplate = new DataTemplate(typeof(AddCategoryPage)),
+            Icon = new FontImageSource
+            {
+                FontFamily = "FaSolid",
+                Color = Colors.White,
+                Glyph = FaSolidIcons.Plus
+            }
+        };
+        flyoutItem.Items.Add(addCategoriaItem);
+        AppShell.Current.Items.Add(flyoutItem);
 
         if (App.UserDetails.TipoUtente == TipoUtente.Admin)
         {
@@ -115,10 +132,6 @@ public static class FlyoutManager
 
     private static void CaricaCategorie()
     {
-        var flyoutItem = new FlyoutItem()
-        {
-            FlyoutDisplayOptions = FlyoutDisplayOptions.AsMultipleItems
-        };
         foreach (var categoria in App.Categorie)
         {
             var color = Color.FromArgb(categoria.Color);
@@ -139,19 +152,5 @@ public static class FlyoutManager
             };
             AppShell.Current.Items.Add(menuItem);
         }
-
-        var addCategoriaItem = new ShellContent
-        {
-            Title = "Crea nuova categoria",
-            ContentTemplate = new DataTemplate(typeof(AddCategoryPage)),
-            Icon = new FontImageSource
-            {
-                FontFamily = "FaSolid",
-                Color = Colors.White,
-                Glyph = FaSolidIcons.Plus
-            }
-        };
-        flyoutItem.Items.Add(addCategoriaItem);
-        AppShell.Current.Items.Add(flyoutItem);
     }
 }

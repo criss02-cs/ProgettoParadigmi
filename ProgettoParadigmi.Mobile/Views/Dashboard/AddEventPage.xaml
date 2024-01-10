@@ -5,96 +5,74 @@
              xmlns:handlers="clr-namespace:ProgettoParadigmi.Mobile.Handlers"
              xmlns:dashboard="clr-namespace:ProgettoParadigmi.Mobile.ViewModels.Dashboard"
              xmlns:dto="clr-namespace:ProgettoParadigmi.Models.Dto;assembly=ProgettoParadigmi.Models"
+             xmlns:ur="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:font="clr-namespace:ProgettoParadigmi.Mobile.FontModels"
              x:Class="ProgettoParadigmi.Mobile.Views.Dashboard.AddEventPage"
              Title="Crea nuovo appuntamento"
              x:DataType="dashboard:AddEventPageViewModel">
-    <VerticalStackLayout
-        Spacing="10"
-        Padding="10">
-        <Border Stroke="White" StrokeThickness="1"
-                Padding="5,0,0,0">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="10" />
-            </Border.StrokeShape>
-            <handlers:BorderlessEntry
-                Text="{Binding AppuntamentoDto.Titolo}"
-                Placeholder="Aggiungi titolo"
-                PlaceholderColor="Gray"
-                TextColor="White"/>
-        </Border>
-        <Border Stroke="White" StrokeThickness="1"
-                Padding="5,0,0,0">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="10" />
-            </Border.StrokeShape>
-            <handlers:BorderlessEntry
-                Text="{Binding AppuntamentoDto.Descrizione}"
-                Placeholder="Descrizione"
-                PlaceholderColor="Gray"
-                TextColor="White"/>
-        </Border>
-        <StackLayout Orientation="Horizontal"
-                     Spacing="10">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Text="Data Inizio" TextColor="White" VerticalOptions="Center" />
-                <DatePicker Date="{Binding DataInizio}"
-                            Grid.Column="1" TextColor="White"
-                            Format="dd/MM/yyyy" />
+    <AbsoluteLayout>
+        <VerticalStackLayout
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            Spacing="10"
+            Padding="10">
+            <ur:TextField Text="{Binding AppuntamentoDto.Titolo}"
+                          TitleColor="Gray"
+                          Title="Titolo" />
+            <ur:EditorField Text="{Binding AppuntamentoDto.Descrizione}"
+                            TitleColor="Gray"
+                            Title="Descrizione" />
+            <Grid ColumnDefinitions="5*,5*" ColumnSpacing="10">
+                <ur:DatePickerField Title="Data Inizio" Date="{Binding DataInizio}"
+                                    Format="dd/MM/yyyy" TitleFontSize="18"
+                                    Icon="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Calendar}}" />
+                <ur:TimePickerField Title="Ora inizio" Format="HH:mm"
+                                    Time="{Binding OraInizio}"
+                                    HorizontalOptions="Fill" TitleFontSize="18" Grid.Column="1"
+                                    Icon="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Clock}}" />
             </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Text="Ora Inizio" TextColor="White" VerticalOptions="Center" />
-                <TimePicker Time="{Binding OraInizio}"
-                            Grid.Column="1" TextColor="White" Format="HH:mm" />
+            <Grid ColumnDefinitions="5*,5*" ColumnSpacing="10">
+                <ur:DatePickerField Title="Data Fine" Date="{Binding DataFine}"
+                                    Format="dd/MM/yyyy" TitleFontSize="18"
+                                    Icon="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Calendar}}" />
+                <ur:TimePickerField Title="Ora Fine" Format="HH:mm"
+                                    Time="{Binding OraFine}"
+                                    HorizontalOptions="Fill" TitleFontSize="18" Grid.Column="1"
+                                    Icon="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Clock}}" />
             </Grid>
+            <ur:PickerField ItemsSource="{Binding Categorie}"
+                            Title="Seleziona una categoria"
+                            SelectedItem="{Binding CategoriaSelezionata}"
+                            ItemDisplayBinding="{Binding Descrizione}" />
+            <StackLayout Spacing="10">
+                <CollectionView
+                    IsVisible="{Binding IsPartecipantiVisible}"
+                    ItemsSource="{Binding Partecipanti}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dto:UtenteDto">
+                            <HorizontalStackLayout Spacing="5">
+                                <Label Text="{Binding Nome}" TextColor="White" />
+                                <Label Text="{Binding Cognome}" TextColor="White" />
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Button Text="Aggiungi partecipanti" Command="{Binding OpenUserListCommand}" />
+            </StackLayout>
+            <Button Text="Crea" Command="{Binding CreateEventCommand}" />
+        </VerticalStackLayout>
+        <StackLayout
+            x:Name="aiLayout"
+            IsVisible="{Binding IsBusy}"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            BackgroundColor="Gray" Opacity="0.5">
+            <ActivityIndicator
+                x:Name="ai"
+                IsRunning="{Binding IsBusy}"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                Color="Black"/>
         </StackLayout>
-        <StackLayout Orientation="Horizontal"
-                     Spacing="10">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Text="Data Fine" TextColor="White" VerticalOptions="Center" />
-                <DatePicker Date="{Binding DataFine}"
-                            Grid.Column="1" TextColor="White" Format="dd/MM/yyyy" />
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Text="Ora Fine" TextColor="White" VerticalOptions="Center" />
-                <TimePicker Time="{Binding OraFine}"
-                            Grid.Column="1" TextColor="White" Format="HH:mm" />
-            </Grid>
-        </StackLayout>
-        <Picker ItemsSource="{Binding Categorie}" 
-                Title="Seleziona una categoria" 
-                SelectedItem="{Binding CategoriaSelezionata}"
-                ItemDisplayBinding="{Binding Descrizione}"></Picker>
-        <StackLayout Spacing="10">
-            <CollectionView
-                IsVisible="{Binding IsPartecipantiVisible}"
-                ItemsSource="{Binding Partecipanti}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="dto:UtenteDto">
-                        <HorizontalStackLayout Spacing="5">
-                            <Label Text="{Binding Nome}" TextColor="White" />
-                            <Label Text="{Binding Cognome}" TextColor="White" />
-                        </HorizontalStackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-            <Button Text="Aggiungi partecipanti" Command="{Binding OpenUserListCommand}"/>
-        </StackLayout>
-        <Button Text="Crea" Command="{Binding CreateEventCommand}" />
-    </VerticalStackLayout>
+    </AbsoluteLayout>
 </ContentPage>

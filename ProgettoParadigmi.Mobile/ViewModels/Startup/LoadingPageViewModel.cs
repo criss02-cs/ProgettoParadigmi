@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
+using ProgettoParadigmi.Mobile.Services;
 using ProgettoParadigmi.Mobile.Services.Categorie;
 using ProgettoParadigmi.Mobile.Utils;
 using ProgettoParadigmi.Mobile.Views.Dashboard;
@@ -27,8 +28,9 @@ public class LoadingPageViewModel
             if (jsonToken.ValidTo < DateTime.UtcNow)
             {
                 Routing.UnRegisterRoute(nameof(AddEventPage));
-                await Shell.Current.DisplayAlert("Sessione scaduta", "Effettua di nuovo l'accesso per continuare",
-                    "Ok");
+                // await Shell.Current.DisplayAlert("Sessione scaduta", "Effettua di nuovo l'accesso per continuare",
+                //     "Ok");
+                await ToastService.ShowToast("Sessione scaduta, effettua di nuovo l'accesso per continuare");
                 await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
             }
             else

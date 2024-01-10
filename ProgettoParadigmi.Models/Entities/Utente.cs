@@ -27,6 +27,7 @@ namespace ProgettoParadigmi.Models.Entities
     public enum TipoUtente
     {
         Admin,
-        Utente
+        Utente,
+        Tester
     }
 }

@@ -8,86 +8,114 @@
              xmlns:handlers="clr-namespace:ProgettoParadigmi.Mobile.Handlers"
              x:Class="ProgettoParadigmi.Mobile.Views.Dashboard.ProfilePage"
              x:DataType="dashboard:ProfilePageViewModel"
-             >
+             Title="Profilo">
     <ContentPage.Resources>
         <ResourceDictionary>
             <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    <!-- <Shell.BackButtonBehavior> -->
-    <!--     <BackButtonBehavior Command="{Binding GoToHomeCommand}" /> -->
-    <!-- </Shell.BackButtonBehavior> -->
-    <StackLayout Spacing="20" Padding="20">
-        <toolkit:AvatarView 
-            Text="{Binding Initials}"
-            WidthRequest="100" HeightRequest="100" CornerRadius="50"
-            FontSize="40" BackgroundColor="{Binding AvatarBg}"
-            BorderWidth="0"/>
-        <StackLayout Orientation="Horizontal">
-            <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
-                   WidthRequest="56" CornerRadius="28">
-                <Image
-                    Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.User},
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            IconImageSource="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.FloppyDisk}, Color={StaticResource White}}"
+            Command="{Binding SalvaUtenteCommand}" />
+    </ContentPage.ToolbarItems>
+    <AbsoluteLayout>
+        <StackLayout Spacing="20" Padding="20"
+                     AbsoluteLayout.LayoutBounds="0,0,1,1"
+                     AbsoluteLayout.LayoutFlags="All">
+            <toolkit:AvatarView
+                Text="{Binding Initials}"
+                WidthRequest="100" HeightRequest="100" CornerRadius="50"
+                FontSize="40" BackgroundColor="{Binding AvatarBg}"
+                TextColor="{Binding AvatarTextColor}"
+                BorderWidth="0" />
+            <StackLayout Orientation="Horizontal">
+                <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
+                       WidthRequest="56" CornerRadius="28" BackgroundColor="White">
+                    <Image
+                        Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.User},
                     Color={StaticResource PrimaryDark}}" />
-            </Frame>
-            <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
-                   HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
-                <handlers:BorderlessEntry Text="{Binding UserDetails.Nome}"
-                                          TextColor="{StaticResource PrimaryDarkText}"
-                                          Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Nome"
-                                          PlaceholderColor="Black" 
-                                          IsReadOnly="{Binding IsEditable, Converter={StaticResource InvertedBoolConverter}}"/>
-            </Frame>
-        </StackLayout>
-        <StackLayout Orientation="Horizontal">
-            <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
-                   WidthRequest="56" CornerRadius="28">
-                <Image
-                    Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.User},
+                </Frame>
+                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                       HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand"
+                       BackgroundColor="White">
+                    <handlers:BorderlessEntry Text="{Binding UserDetails.Nome}"
+                                              TextColor="{StaticResource PrimaryDarkText}"
+                                              Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Nome"
+                                              PlaceholderColor="Black"
+                                              IsReadOnly="{Binding IsEditable, Converter={StaticResource InvertedBoolConverter}}" />
+                </Frame>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
+                       WidthRequest="56" CornerRadius="28" BackgroundColor="White">
+                    <Image
+                        Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.User},
                     Color={StaticResource PrimaryDark}}" />
-            </Frame>
-            <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
-                   HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
-                <handlers:BorderlessEntry Text="{Binding UserDetails.Cognome}"
-                                          TextColor="{StaticResource PrimaryDarkText}"
-                                          Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Nome"
-                                          PlaceholderColor="Black" 
-                                          IsReadOnly="{Binding IsEditable, Converter={StaticResource InvertedBoolConverter}}"/>
-            </Frame>
-        </StackLayout>
-        <StackLayout Orientation="Horizontal">
-            <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
-                   WidthRequest="56" CornerRadius="28">
-                <Image
-                    Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Envelope},
+                </Frame>
+                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0" BackgroundColor="White"
+                       HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
+                    <handlers:BorderlessEntry Text="{Binding UserDetails.Cognome}"
+                                              TextColor="{StaticResource PrimaryDarkText}"
+                                              Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Nome"
+                                              PlaceholderColor="Black"
+                                              IsReadOnly="{Binding IsEditable, Converter={StaticResource InvertedBoolConverter}}" />
+                </Frame>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
+                       WidthRequest="56" CornerRadius="28" BackgroundColor="White">
+                    <Image
+                        Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Envelope},
                     Color={StaticResource PrimaryDark}}" />
-            </Frame>
-            <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
-                   HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
-                <handlers:BorderlessEntry Text="{Binding UserDetails.Email}"
-                                          TextColor="{StaticResource PrimaryDarkText}"
-                                          Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Email"
-                                          PlaceholderColor="Black" 
-                                          IsReadOnly="{Binding IsEditable, Converter={StaticResource InvertedBoolConverter}}"/>
-            </Frame>
+                </Frame>
+                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
+                       HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand" BackgroundColor="White">
+                    <handlers:BorderlessEntry Text="{Binding UserDetails.Email}"
+                                              TextColor="{StaticResource PrimaryDarkText}"
+                                              Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Email"
+                                              PlaceholderColor="Black"
+                                              IsReadOnly="{Binding IsEditable, Converter={StaticResource InvertedBoolConverter}}" />
+                </Frame>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
+                       WidthRequest="56" CornerRadius="28" BackgroundColor="White">
+                    <!-- <Image -->
+                    <!--     Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Envelope}, -->
+                    <!--     Color={StaticResource PrimaryDark}}" /> -->
+                </Frame>
+                <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0" BackgroundColor="White"
+                       HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
+                    <handlers:BorderlessEntry Text="{Binding TipoUtenteString}"
+                                              TextColor="{StaticResource PrimaryDarkText}"
+                                              Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Nome"
+                                              PlaceholderColor="Black" IsReadOnly="True">
+                        <handlers:BorderlessEntry.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangeTipoUtenteCommand}" />
+                        </handlers:BorderlessEntry.GestureRecognizers>
+                    </handlers:BorderlessEntry>
+                </Frame>
+            </StackLayout>
+            <Button Text="Cambia password" IsVisible="{Binding IsEditable}" BackgroundColor="DarkOrange" TextColor="White"
+                    Command="{Binding AggiornaPasswordCommand}" />
+            <!-- Utilizzo IsEditable per eliminare perché contiene la stessa condizione -->
+            <Button Text="Elimina" IsVisible="{Binding IsEditable}" BackgroundColor="Red" TextColor="White"
+                    Command="{Binding EliminaUtenteCommand}" />
         </StackLayout>
-        <StackLayout Orientation="Horizontal">
-            <Frame ZIndex="1" HasShadow="True" BorderColor="White" HeightRequest="56"
-                   WidthRequest="56" CornerRadius="28">
-                <!-- <Image -->
-                <!--     Source="{FontImageSource FontFamily=FaSolid, Glyph={x:Static font:FaSolidIcons.Envelope}, -->
-                <!--     Color={StaticResource PrimaryDark}}" /> -->
-            </Frame>
-            <Frame HeightRequest="45" Margin="-20,0,0,0" Padding="0"
-                   HasShadow="True" BorderColor="White" HorizontalOptions="FillAndExpand">
-                <handlers:BorderlessEntry Text="{Binding TipoUtenteString}"
-                                          TextColor="{StaticResource PrimaryDarkText}"
-                                          Margin="25, 0,0,0" VerticalOptions="Center" Placeholder="Nome"
-                                          PlaceholderColor="Black" IsReadOnly="True"/>
-            </Frame>
+        <StackLayout
+            x:Name="aiLayout"
+            IsVisible="{Binding IsBusy}"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            BackgroundColor="Gray" Opacity="0.5">
+            <ActivityIndicator
+                x:Name="ai"
+                IsRunning="{Binding IsBusy}"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                Color="Black" />
         </StackLayout>
-        <!-- Utilizzo IsEditable per eliminare perché contiene la stessa condizione -->
-        <Button Text="Elimina" IsVisible="{Binding IsEditable}" BackgroundColor="Red" TextColor="White"
-                Command="{Binding EliminaUtenteCommand}"/>
-    </StackLayout>
+    </AbsoluteLayout>
+
 </ContentPage>
