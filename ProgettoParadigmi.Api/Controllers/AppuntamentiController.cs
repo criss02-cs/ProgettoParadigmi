@@ -30,7 +30,8 @@ namespace ProgettoParadigmi.Api.Controllers
             }
         }
 
-        [HttpGet, Route("{userId:Guid}/{mese:int?}/{anno:int?}")]
+        [HttpGet, Route("{userId:Guid}")]
+        [HttpGet, Route("{userId:Guid}/{mese:int}/{anno:int}")]
         public IActionResult GetAppuntamentiByUserId(Guid userId, int mese = 0, int anno = 0)
         {
             try
